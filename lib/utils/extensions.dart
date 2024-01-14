@@ -95,6 +95,19 @@ extension DateTimeMapping on DateTime {
   }
 }
 
+extension TaskDateFilterMapping on TaskDateFilter {
+  int mapToBottomNavigationBarIndex() {
+    switch (this) {
+      case TaskDateFilter.yesterday:
+        return 0;
+      case TaskDateFilter.today:
+        return 1;
+      case TaskDateFilter.tomorrow:
+        return 2;
+    }
+  }
+}
+
 extension IntMapping on int {
   TaskDateFilter toDateFilter() {
     switch (this) {
@@ -106,19 +119,6 @@ extension IntMapping on int {
         return TaskDateFilter.tomorrow;
       default:
         return TaskDateFilter.today;
-    }
-  }
-}
-
-extension TaskDateFilterMapping on TaskDateFilter {
-  int mapToBottomNavigationBarIndex() {
-    switch (this) {
-      case TaskDateFilter.yesterday:
-        return 0;
-      case TaskDateFilter.today:
-        return 1;
-      case TaskDateFilter.tomorrow:
-        return 2;
     }
   }
 }
