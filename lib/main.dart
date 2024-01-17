@@ -1,3 +1,4 @@
+import 'package:dutask/providers/theme_provider.dart';
 import 'package:dutask/themes/default_theme.dart';
 import 'package:dutask/views/task_list_view.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,17 @@ void main() {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: themeData,
+      theme: defaultLightTheme,
+      darkTheme: defaultDarkTheme,
+      themeMode: themeMode,
       home: TaskListView(),
     );
   }

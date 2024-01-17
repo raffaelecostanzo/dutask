@@ -1,4 +1,5 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:dutask/views/settings_view.dart';
 import 'package:dutask/views/task_form_view.dart';
 import 'package:dutask/widgets/bottom_date_nav_bar.dart';
 import 'package:dutask/widgets/task_item.dart';
@@ -51,6 +52,18 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dutask'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Go to settings page',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsView(),
+              ),
+            ),
+          )
+        ],
       ),
       body: Column(
         children: [

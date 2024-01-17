@@ -137,3 +137,16 @@ extension TaskStatusFilterMapping on TaskStatusFilter {
     }
   }
 }
+
+extension ThemeModeMapping on ThemeMode {
+  String mapToString() {
+    switch (this) {
+      case ThemeMode.system:
+        return 'System default';
+      case ThemeMode.light:
+        return 'Light';
+      case ThemeMode.dark:
+        return 'Dark';
+    }
+  }
+}
