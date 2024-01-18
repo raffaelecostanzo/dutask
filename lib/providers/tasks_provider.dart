@@ -1,22 +1,26 @@
 import 'package:dutask/models/task_model.dart';
+import 'package:dutask/utils/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksNotifier extends Notifier<List<TaskModel>> {
   List<TaskModel> _fetchTasks() {
     return [
       TaskModel(
+        id: uuid.v4(),
         title: 'Brush your teeth',
         description: null,
         dueDate: DateTime.now(),
         status: TaskStatus.active,
       ),
       TaskModel(
+        id: uuid.v4(),
         title: 'Eat well',
         description: null,
         dueDate: DateTime.now(),
         status: TaskStatus.active,
       ),
       TaskModel(
+        id: uuid.v4(),
         title: 'Be absurd',
         description: null,
         dueDate: DateTime.now(),
@@ -41,8 +45,8 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
     previousState = [...state];
     final localPreviousState = [...state];
     final taskToReplaceIndex = state.indexWhere((task) => task.id == taskId);
-    localPreviousState[taskToReplaceIndex] =
-        TaskModel.forToggle(state[taskToReplaceIndex]);
+    localPreviousState[taskToReplaceIndex] = state[taskToReplaceIndex]
+        .copyWith(status: state[taskToReplaceIndex].status.toggle());
     state = [...localPreviousState];
   }
 

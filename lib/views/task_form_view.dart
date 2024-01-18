@@ -72,20 +72,18 @@ class _TaskFormViewState extends ConsumerState<TaskFormView> {
       if (widget.task != null) {
         taskNotifier.updateTask(
           widget.task!.id,
-          TaskModel.forUpdate(
-            widget.task!.id,
-            TaskModel(
-              title: _titleTextController.text,
-              description: _descriptionTextController.text,
-              dueDate: dateFormat.parse(_dateTextController.text),
-              status: _status,
-            ),
+          widget.task!.copyWith(
+            title: _titleTextController.text,
+            description: _descriptionTextController.text,
+            dueDate: dateFormat.parse(_dateTextController.text),
+            status: _status,
           ),
         );
         snackBarMessage = 'Task updated successfully';
       } else {
         taskNotifier.createTask(
           TaskModel(
+            id: uuid.v4(),
             title: _titleTextController.text,
             description: _descriptionTextController.text,
             dueDate: dateFormat.parse(_dateTextController.text),

@@ -32,7 +32,7 @@ class TaskItemMenuButton extends ConsumerWidget {
             context.showSnackBarWithUndo(
                 taskNotifier, 'Task deleted successfully');
           case Operation.duplicate:
-            taskNotifier.createTask(TaskModel.forDuplication(task));
+            taskNotifier.createTask(task.copyWith(id: uuid.v4()));
             context.showSnackBarWithUndo(
                 taskNotifier, 'Task duplicated successfully');
           default:

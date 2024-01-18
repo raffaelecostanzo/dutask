@@ -1,42 +1,23 @@
-import 'package:dutask/utils/extensions.dart';
 import 'package:uuid/uuid.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'task_model.freezed.dart';
+part 'task_model.g.dart';
 
 const uuid = Uuid();
 
 enum TaskStatus { active, started, completed }
 
-class TaskModel {
-  TaskModel({
-    required this.title,
-    required this.description,
-    required this.dueDate,
-    required this.status,
-  }) : id = uuid.v4();
+@freezed
+class TaskModel with _$TaskModel {
+  const factory TaskModel({
+    required String title,
+    required String? description,
+    required DateTime dueDate,
+    required TaskStatus status,
+    required String id,
+  }) = _TaskModel;
 
-  TaskModel.forToggle(TaskModel task)
-      : id = task.id,
-        title = task.title,
-        description = task.description,
-        dueDate = task.dueDate,
-        status = task.status.toggle();
-
-  TaskModel.forUpdate(String taskId, TaskModel task)
-      : id = taskId,
-        title = task.title,
-        description = task.description,
-        dueDate = task.dueDate,
-        status = task.status;
-
-  TaskModel.forDuplication(TaskModel task)
-      : id = uuid.v4(),
-        title = task.title,
-        description = task.description,
-        dueDate = task.dueDate,
-        status = task.status;
-
-  final String id;
-  final String title;
-  final String? description;
-  final DateTime dueDate;
-  final TaskStatus status;
+  factory TaskModel.fromJson(Map<String, Object> json) =>
+      _$TaskModelFromJson(json);
 }
