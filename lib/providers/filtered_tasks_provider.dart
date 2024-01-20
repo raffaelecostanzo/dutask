@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum TaskStatusFilter { all, started, active, completed }
 
-enum TaskDateFilter { yesterday, today, tomorrow }
+enum TaskDateFilter { all, yesterday, today, tomorrow }
 
 final taskStatusFilter = StateProvider((ref) => TaskStatusFilter.all);
-final taskDateFilter = StateProvider((ref) => TaskDateFilter.today);
+final taskDateFilter = StateProvider((ref) => TaskDateFilter.all);
 
 final filteredTasks = Provider<List<TaskModel>>((ref) {
   final statusFilter = ref.watch(taskStatusFilter);

@@ -1,5 +1,5 @@
 import 'package:dutask/providers/theme_provider.dart';
-import 'package:dutask/themes/default_theme.dart';
+import 'package:dutask/themes/default_themes.dart';
 import 'package:dutask/views/task_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

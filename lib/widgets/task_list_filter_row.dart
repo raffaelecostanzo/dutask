@@ -10,7 +10,7 @@ class TaskListFilterRow extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: TaskStatusFilter.values.map((filter) {
-        return ChoiceChip(
+        return FilterChip(
           label: Text(filter.mapToText()),
           selected: selectedFilter == filter,
           onSelected: (_) => ref.read(taskStatusFilter.notifier).state = filter,

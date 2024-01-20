@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TaskItemMenuButton extends ConsumerWidget {
-  const TaskItemMenuButton({
+  const TaskItemMenuButton(
+    this.task, {
     super.key,
-    required this.task,
   });
 
   final TaskModel task;

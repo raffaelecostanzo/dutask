@@ -18,14 +18,14 @@ class TaskItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Dismissible(
       background: Container(
-        color: Colors.redAccent,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [SizedBox(width: 24), Icon(Icons.delete)],
         ),
       ),
       secondaryBackground: Container(
-        color: Colors.redAccent,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [Icon(Icons.delete), SizedBox(width: 24)],
@@ -53,7 +53,7 @@ class TaskItem extends ConsumerWidget {
           ),
         ),
         subtitle: Text(dateFormat.format(task.dueDate)),
-        trailing: TaskItemMenuButton(task: task),
+        trailing: TaskItemMenuButton(task),
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(

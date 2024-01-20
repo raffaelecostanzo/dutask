@@ -83,6 +83,8 @@ extension StringExtension on String {
 extension DateTimeMapping on DateTime {
   bool equalsToFilter(TaskDateFilter taskDateFilter) {
     switch (taskDateFilter) {
+      case TaskDateFilter.all:
+        return true;
       case TaskDateFilter.yesterday:
         return DateUtils.dateOnly(this) ==
             DateUtils.dateOnly(DateUtils.addDaysToDate(DateTime.now(), -1));
@@ -98,12 +100,14 @@ extension DateTimeMapping on DateTime {
 extension TaskDateFilterMapping on TaskDateFilter {
   int mapToBottomNavigationBarIndex() {
     switch (this) {
-      case TaskDateFilter.yesterday:
+      case TaskDateFilter.all:
         return 0;
-      case TaskDateFilter.today:
+      case TaskDateFilter.yesterday:
         return 1;
-      case TaskDateFilter.tomorrow:
+      case TaskDateFilter.today:
         return 2;
+      case TaskDateFilter.tomorrow:
+        return 3;
     }
   }
 }
@@ -112,13 +116,15 @@ extension IntMapping on int {
   TaskDateFilter toDateFilter() {
     switch (this) {
       case 0:
-        return TaskDateFilter.yesterday;
+        return TaskDateFilter.all;
       case 1:
-        return TaskDateFilter.today;
+        return TaskDateFilter.yesterday;
       case 2:
+        return TaskDateFilter.today;
+      case 3:
         return TaskDateFilter.tomorrow;
       default:
-        return TaskDateFilter.today;
+        return TaskDateFilter.all;
     }
   }
 }

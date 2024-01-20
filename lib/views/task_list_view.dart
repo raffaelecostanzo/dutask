@@ -1,7 +1,7 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/views/settings_view.dart';
 import 'package:dutask/views/task_form_view.dart';
-import 'package:dutask/widgets/bottom_date_nav_bar.dart';
+import 'package:dutask/widgets/filter_navigation_bar.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dutask/widgets/task_list_filter_row.dart';
@@ -16,7 +16,7 @@ class TaskListView extends ConsumerStatefulWidget {
 
 class _TaskListViewState extends ConsumerState<TaskListView> {
   final _scrollController = ScrollController();
-  bool _isFABVisible = true;
+  bool _isFloatingActionButtonVisible = true;
 
   @override
   void initState() {
@@ -24,16 +24,16 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels > 0) {
-          if (_isFABVisible) {
+          if (_isFloatingActionButtonVisible) {
             setState(() {
-              _isFABVisible = false;
+              _isFloatingActionButtonVisible = false;
             });
           }
         }
       } else {
-        if (!_isFABVisible) {
+        if (!_isFloatingActionButtonVisible) {
           setState(() {
-            _isFABVisible = true;
+            _isFloatingActionButtonVisible = true;
           });
         }
       }
@@ -55,7 +55,6 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: 'Go to settings page',
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -81,9 +80,9 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomDayNavBar(),
+      bottomNavigationBar: FilterNavigationBar(),
       floatingActionButton: Visibility(
-        visible: _isFABVisible,
+        visible: _isFloatingActionButtonVisible,
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => Navigator.push(
