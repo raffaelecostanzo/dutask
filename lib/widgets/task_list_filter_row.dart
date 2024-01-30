@@ -9,13 +9,16 @@ class TaskListFilterRow extends ConsumerWidget {
     final selectedFilter = ref.watch(taskStatusFilter);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: TaskStatusFilter.values.map((filter) {
-        return FilterChip(
-          label: Text(filter.mapToText()),
-          selected: selectedFilter == filter,
-          onSelected: (_) => ref.read(taskStatusFilter.notifier).state = filter,
-        );
-      }).toList(),
+      children: TaskStatusFilter.values.map(
+        (filter) {
+          return FilterChip(
+            label: Text(filter.mapToText()),
+            selected: selectedFilter == filter,
+            onSelected: (_) =>
+                ref.read(taskStatusFilter.notifier).state = filter,
+          );
+        },
+      ).toList(),
     );
   }
 }
