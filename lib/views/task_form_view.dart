@@ -28,13 +28,13 @@ class _TaskFormViewState extends ConsumerState<TaskFormView> {
     super.initState();
     if (widget.task != null) {
       _titleTextController.text = widget.task!.title;
+      if (widget.task!.dueDate != null) {
+        _dateTextController.text = dateFormat.format(widget.task!.dueDate!);
+      }
       if (widget.task!.description != null) {
         _descriptionTextController.text = widget.task!.description!;
       }
-      _dateTextController.text = dateFormat.format(widget.task!.dueDate);
       _status = widget.task!.status;
-    } else {
-      _dateTextController.text = dateFormat.format(DateTime.now());
     }
   }
 
@@ -75,7 +75,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormView> {
           widget.task!.copyWith(
             title: _titleTextController.text,
             description: _descriptionTextController.text,
-            dueDate: dateFormat.parse(_dateTextController.text),
+            dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
           ),
         );
@@ -86,8 +86,9 @@ class _TaskFormViewState extends ConsumerState<TaskFormView> {
             id: uuid.v4(),
             title: _titleTextController.text,
             description: _descriptionTextController.text,
-            dueDate: dateFormat.parse(_dateTextController.text),
+            dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
+            membershipLists: null,
           ),
         );
         snackBarMessage = 'Task created successfullly';

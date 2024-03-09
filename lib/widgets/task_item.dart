@@ -52,7 +52,9 @@ class TaskItem extends ConsumerWidget {
                 : null,
           ),
         ),
-        subtitle: Text(dateFormat.format(task.dueDate)),
+        subtitle: task.dueDate != null
+            ? Text(dateFormat.format(task.dueDate!))
+            : null,
         trailing: TaskItemMenuButton(task),
         onTap: () => Navigator.push(
           context,

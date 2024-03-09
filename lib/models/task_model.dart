@@ -13,8 +13,9 @@ class TaskModel with _$TaskModel {
   const factory TaskModel({
     required String title,
     required String? description,
-    required DateTime dueDate,
+    required DateTime? dueDate,
     required TaskStatus status,
+    required List? membershipLists,
     required String id,
   }) = _TaskModel;
 

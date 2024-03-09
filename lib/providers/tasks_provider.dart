@@ -10,6 +10,7 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
         title: 'Brush your teeth',
         description: null,
         dueDate: DateTime.now(),
+        membershipLists: null,
         status: TaskStatus.active,
       ),
       TaskModel(
@@ -17,13 +18,15 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
         title: 'Eat well',
         description: null,
         dueDate: DateTime.now(),
+        membershipLists: null,
         status: TaskStatus.active,
       ),
       TaskModel(
         id: uuid.v4(),
         title: 'Be absurd',
         description: null,
-        dueDate: DateTime.now(),
+        dueDate: null,
+        membershipLists: null,
         status: TaskStatus.active,
       )
     ];

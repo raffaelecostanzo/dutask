@@ -7,7 +7,7 @@ class FormValidator {
   }
 
   static String? dueDate(String? dueDate) {
-    if (dueDate == null) return 'Invalid date';
+    if (dueDate == null || dueDate.isEmpty) return null;
     try {
       final parsedDate = dateFormat.parse(dueDate);
       if (parsedDate.isBefore(DateTime(1970, 1, 1)) ||
