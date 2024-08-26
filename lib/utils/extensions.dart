@@ -83,17 +83,18 @@ extension StringExtension on String {
 
 extension DateTimeMapping on DateTime? {
   bool equalsToFilter(TaskDateFilter taskDateFilter) {
+    if (this == null) {
+      return taskDateFilter == TaskDateFilter.all;
+    }
     switch (taskDateFilter) {
       case TaskDateFilter.all:
         return true;
       case TaskDateFilter.yesterday:
-        if (this == null) return false;
         return DateUtils.dateOnly(this!) ==
             DateUtils.dateOnly(DateUtils.addDaysToDate(DateTime.now(), -1));
       case TaskDateFilter.today:
         return DateUtils.isSameDay(this, DateTime.now());
       case TaskDateFilter.tomorrow:
-        if (this == null) return false;
         return DateUtils.dateOnly(this!) ==
             DateUtils.dateOnly(DateUtils.addDaysToDate(DateTime.now(), 1));
     }
@@ -163,6 +164,10 @@ extension ThemeModeMapping on ThemeMode {
 extension DateFormatting on String {
   DateTime? getDateOrNull() {
     if (this.isEmpty) return null;
-    return dateFormat.parse(this);
+    try {
+      return dateFormat.parse(this);
+    } catch (_) {
+      return null;
+    }
   }
 }
