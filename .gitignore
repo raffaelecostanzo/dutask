@@ -10,6 +10,9 @@
 .svn/
 migrate_working_dir/
 
+# Google IDX related
+*.idx
+
 # IntelliJ related
 *.iml
 *.ipr
