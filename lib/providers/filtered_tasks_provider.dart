@@ -4,7 +4,6 @@ import 'package:dutask/utils/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum TaskStatusFilter { all, started, active, completed }
-
 enum TaskDateFilter { all, yesterday, today, tomorrow }
 
 final taskStatusFilter = StateProvider((ref) => TaskStatusFilter.all);

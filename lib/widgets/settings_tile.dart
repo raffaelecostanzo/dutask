@@ -35,20 +35,21 @@ class SettingsTile extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: options.length,
-                    itemBuilder: (_, index) => ListTile(
-                      leading: Icon(
-                        options[index] == currentValue ? Icons.check : null,
-                      ),
-                      title: Text(
-                        dynamicToString(options[index]),
-                      ),
-                      onTap: () {
-                        onOptionChanged(options[index]);
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                  child: ListView(
+                    children: options.map((option) {
+                      return ListTile(
+                        leading: Icon(
+                          option == currentValue ? Icons.check : null,
+                        ),
+                        title: Text(
+                          dynamicToString(option),
+                        ),
+                        onTap: () {
+                          onOptionChanged(option);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }).toList(),
                   ),
                 ),
               ],

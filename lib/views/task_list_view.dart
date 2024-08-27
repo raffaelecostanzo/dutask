@@ -1,7 +1,7 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/views/settings_view.dart';
 import 'package:dutask/views/task_form_view.dart';
 import 'package:dutask/widgets/filter_navigation_bar.dart';
+import 'package:dutask/widgets/my_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dutask/widgets/task_list_filter_row.dart';
@@ -22,20 +22,17 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels > 0) {
-          if (_isFloatingActionButtonVisible) {
-            setState(() {
-              _isFloatingActionButtonVisible = false;
-            });
-          }
-        }
-      } else {
-        if (!_isFloatingActionButtonVisible) {
-          setState(() {
-            _isFloatingActionButtonVisible = true;
-          });
-        }
+      final isAtEdge = _scrollController.position.atEdge;
+      final isAtBottom = _scrollController.position.pixels > 0;
+
+      if (isAtEdge && isAtBottom && _isFloatingActionButtonVisible) {
+        setState(() {
+          _isFloatingActionButtonVisible = false;
+        });
+      } else if (!isAtEdge && !_isFloatingActionButtonVisible) {
+        setState(() {
+          _isFloatingActionButtonVisible = true;
+        });
       }
     });
   }
@@ -59,98 +56,9 @@ class _TaskListViewState extends ConsumerState<TaskListView> {
           )
         ],
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            SafeArea(
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 20, left: 20),
-                    alignment: AlignmentDirectional.topStart,
-                    height: 53,
-                    child: Text('Dutask',
-                        style: Theme.of(context).textTheme.titleLarge),
-                  ),
-                  Divider()
-                ],
-              ),
-            ),
-            Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.list_alt_outlined),
-                          title: const Text('My Day'),
-                          selected: false,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.list_alt_outlined),
-                          title: const Text('Recurrences'),
-                          selected: false,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.list_alt_outlined),
-                          title: const Text('Important'),
-                          selected: false,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.settings_outlined),
-                  title: const Text('Settings'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SettingsView(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.help_outline),
-                  title: const Text('Help and Feedback'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.info_outline),
-                  title: const Text('About'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+      drawer: MyDrawer(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TaskListFilterRow(),
           Expanded(
