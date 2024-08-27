@@ -1,8 +1,8 @@
 import 'package:dutask/utils/functions.dart';
 import 'package:flutter/material.dart';
 
-class SettingsTile extends StatelessWidget {
-  const SettingsTile({
+class SettingsItem extends StatelessWidget {
+  const SettingsItem({
     super.key,
     required this.currentValue,
     required this.title,

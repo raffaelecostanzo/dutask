@@ -114,6 +114,19 @@ extension TaskDateFilterMapping on TaskDateFilter {
         return 3;
     }
   }
+
+  String mapToText() {
+    switch (this) {
+      case TaskDateFilter.all:
+        return 'All';
+      case TaskDateFilter.yesterday:
+        return 'Yesterday';
+      case TaskDateFilter.today:
+        return 'Today';
+      case TaskDateFilter.tomorrow:
+        return 'Tomorrow';
+    }
+  }
 }
 
 extension IntMapping on int {

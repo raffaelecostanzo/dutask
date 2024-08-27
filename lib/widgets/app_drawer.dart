@@ -1,8 +1,8 @@
-import 'package:dutask/views/settings_view.dart';
+import 'package:dutask/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({
     super.key,
   });
 
@@ -25,38 +25,32 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.list_alt_outlined),
-                        title: const Text('My Day'),
-                        selected: false,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.list_alt_outlined),
-                        title: const Text('Recurrences'),
-                        selected: false,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.list_alt_outlined),
-                        title: const Text('Important'),
-                        selected: false,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.list_alt_outlined),
+                  title: const Text('My Day'),
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.list_alt_outlined),
+                  title: const Text('Recurrences'),
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.list_alt_outlined),
+                  title: const Text('Important'),
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),
@@ -72,7 +66,7 @@ class MyDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SettingsView(),
+                      builder: (context) => const SettingsScreen(),
                     ),
                   );
                 },

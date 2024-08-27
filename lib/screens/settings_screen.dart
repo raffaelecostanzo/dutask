@@ -1,10 +1,10 @@
 import 'package:dutask/providers/theme_provider.dart';
-import 'package:dutask/widgets/settings_tile.dart';
+import 'package:dutask/widgets/settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsView extends ConsumerWidget {
-  const SettingsView({super.key});
+class SettingsScreen extends ConsumerWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,7 +14,7 @@ class SettingsView extends ConsumerWidget {
       ),
       body: ListView(
         children: [
-          SettingsTile(
+          SettingsItem(
             currentValue: ref.watch(themeModeProvider),
             title: 'Theme',
             icon: Icons.palette_outlined,

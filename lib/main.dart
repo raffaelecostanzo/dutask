@@ -1,6 +1,6 @@
 import 'package:dutask/providers/theme_provider.dart';
 import 'package:dutask/themes/default_themes.dart';
-import 'package:dutask/views/task_list_view.dart';
+import 'package:dutask/screens/task_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +23,7 @@ class MainApp extends ConsumerWidget {
       theme: defaultLightTheme,
       darkTheme: defaultDarkTheme,
       themeMode: themeMode,
-      home: TaskListView(),
+      home: TaskListScreen(),
     );
   }
 }

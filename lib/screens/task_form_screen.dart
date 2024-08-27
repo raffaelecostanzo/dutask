@@ -7,16 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dutask/utils/constants.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class TaskFormView extends ConsumerStatefulWidget {
-  const TaskFormView({super.key, this.task});
+class TaskFormScreen extends ConsumerStatefulWidget {
+  const TaskFormScreen({super.key, this.task});
 
   final TaskModel? task;
 
   @override
-  ConsumerState<TaskFormView> createState() => _TaskFormViewState();
+  ConsumerState<TaskFormScreen> createState() => _TaskFormViewState();
 }
 
-class _TaskFormViewState extends ConsumerState<TaskFormView> {
+class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleTextController = TextEditingController();
   final _dateTextController = TextEditingController();
