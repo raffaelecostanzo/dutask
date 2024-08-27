@@ -130,7 +130,7 @@ extension TaskDateFilterMapping on TaskDateFilter {
 }
 
 extension IntMapping on int {
-  TaskDateFilter toDateFilter() {
+  TaskDateFilter mapToDateFilter() {
     switch (this) {
       case 0:
         return TaskDateFilter.all;

@@ -24,16 +24,18 @@ class FilterChipsBar<T> extends ConsumerWidget {
       child: Row(
         children: [
           SizedBox(width: 16),
-          ...filters.map((filter) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: FilterChip(
-                label: Text(filterToText(filter)),
-                selected: selectedFilter == filter,
-                onSelected: (_) => ref.read(selectedFilterProvider.notifier).state = filter,
-              ),
-            );
-          },
+          ...filters.map(
+            (filter) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: FilterChip(
+                  label: Text(filterToText(filter)),
+                  selected: selectedFilter == filter,
+                  onSelected: (_) =>
+                      ref.read(selectedFilterProvider.notifier).state = filter,
+                ),
+              );
+            },
           ).toList(),
         ],
       ),

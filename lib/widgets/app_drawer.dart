@@ -1,13 +1,17 @@
+import 'package:dutask/data/list_icons.dart';
+import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lists = ref.watch(listsProvider);
     return Drawer(
       child: Column(
         children: [
@@ -27,32 +31,12 @@ class AppDrawer extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
-              children: [
-                ListTile(
-                  leading: Icon(Icons.list_alt_outlined),
-                  title: const Text('My Day'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.list_alt_outlined),
-                  title: const Text('Recurrences'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.list_alt_outlined),
-                  title: const Text('Important'),
-                  selected: false,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+              children: lists.map((list) {
+                return ListTile(
+                  leading: Icon(iconMap[list.icon]),
+                  title: Text(list.title),
+                );
+              }).toList(),
             ),
           ),
           Column(

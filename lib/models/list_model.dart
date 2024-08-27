@@ -11,6 +11,7 @@ class ListModel with _$ListModel {
   const factory ListModel({
     required String title,
     required String? description,
+    required String? icon,
     required String id,
   }) = _ListModel;
 

@@ -21,7 +21,7 @@ class FilterNavigationBar extends ConsumerWidget {
       items: navBarItems,
       currentIndex: dateFilter.mapToBottomNavigationBarIndex(),
       onTap: (index) =>
-          ref.read(taskDateFilter.notifier).state = index.toDateFilter(),
+          ref.read(taskDateFilter.notifier).state = index.mapToDateFilter(),
     );
   }
 }

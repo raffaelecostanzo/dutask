@@ -60,13 +60,12 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
       drawer: AppDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           FilterChipsBar<TaskStatusFilter>.FilterChipsBar(
-          selectedFilterProvider: taskStatusFilter,
-          filters: TaskStatusFilter.values,
-          filterToText: (filter) => filter.mapToText(),
-        ),
+            selectedFilterProvider: taskStatusFilter,
+            filters: TaskStatusFilter.values,
+            filterToText: (filter) => filter.mapToText(),
+          ),
           Expanded(
             child: tasks.isEmpty
                 ? Center(

@@ -1,35 +1,11 @@
+import 'package:dutask/data/default_tasks.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/utils/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksNotifier extends Notifier<List<TaskModel>> {
   List<TaskModel> _fetchTasks() {
-    return [
-      TaskModel(
-        id: uuid.v4(),
-        title: 'Brush your teeth',
-        description: null,
-        dueDate: DateTime.now(),
-        membershipLists: null,
-        status: TaskStatus.active,
-      ),
-      TaskModel(
-        id: uuid.v4(),
-        title: 'Eat well',
-        description: null,
-        dueDate: DateTime.now(),
-        membershipLists: null,
-        status: TaskStatus.active,
-      ),
-      TaskModel(
-        id: uuid.v4(),
-        title: 'Be absurd',
-        description: null,
-        dueDate: null,
-        membershipLists: null,
-        status: TaskStatus.active,
-      )
-    ];
+    return defaultTasks;
   }
 
   @override
