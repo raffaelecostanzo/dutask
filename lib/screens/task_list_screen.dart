@@ -1,7 +1,7 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/providers/quick_filter_provider.dart';
 import 'package:dutask/screens/task_form_screen.dart';
-import 'package:dutask/widgets/filter_navigation_bar.dart';
+//import 'package:dutask/widgets/filter_navigation_bar.dart';
 import 'package:dutask/widgets/filter_settings_drawer.dart';
 import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
@@ -67,7 +67,12 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FilterChipsBar(selectedFilter: currentQuickFilter),
+          FilterChipsBar(
+            selectedFilter: currentQuickFilter,
+          ),
+          SizedBox(
+            height: 16,
+          ),
           Expanded(
             child: tasks.isEmpty
                 ? Center(
@@ -81,7 +86,7 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: FilterNavigationBar(),
+      //bottomNavigationBar: FilterNavigationBar(),
       floatingActionButton: Visibility(
         visible: _isFloatingActionButtonVisible,
         child: FloatingActionButton(

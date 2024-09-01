@@ -1,4 +1,5 @@
 import 'package:dutask/data/quick_filters.dart';
+import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/providers/quick_filter_provider.dart';
 import 'package:dutask/utils/functions.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,14 @@ class FilterSettingsDrawer extends ConsumerWidget {
                 return RadioListTile(
                   value: filter,
                   groupValue: currentQuickFilter,
-                  onChanged: (onChangedFilter) => ref
-                      .read(selectedQuickFilter.notifier)
-                      .state = onChangedFilter!,
+                  onChanged: (onChangedFilter) {
+                    ref.read(selectedQuickFilter.notifier).state =
+                        onChangedFilter!;
+                    ref.read(taskStatusFilter.notifier).state =
+                        TaskStatusFilter.all;
+                    ref.read(taskDateFilter.notifier).state =
+                        TaskDateFilter.all;
+                  },
                   title: Text(getTaskFilterName(filter)),
                 );
               }).toList(),
