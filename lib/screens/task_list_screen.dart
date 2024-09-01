@@ -70,9 +70,6 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
           FilterChipsBar(
             selectedFilter: currentQuickFilter,
           ),
-          SizedBox(
-            height: 16,
-          ),
           Expanded(
             child: tasks.isEmpty
                 ? Center(
@@ -101,46 +98,4 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
       ),
     );
   }
-}
-
-void showRightDrawer(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return FractionallySizedBox(
-        widthFactor: 0.8, // Imposta la larghezza del Drawer personalizzato
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                spreadRadius: 5,
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              ListTile(
-                title: const Text('Filter 1'),
-                onTap: () {
-                  // Azione filtro 1
-                },
-              ),
-              ListTile(
-                title: const Text('Filter 2'),
-                onTap: () {
-                  // Azione filtro 2
-                },
-              ),
-              // Aggiungi più filtri qui
-            ],
-          ),
-        ),
-      );
-    },
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-  );
 }
