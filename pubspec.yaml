@@ -17,7 +17,7 @@ dependencies:
   json_annotation: ^4.9.0
   mask_text_input_formatter: ^2.6.0
   path_provider: ^2.1.1
-  uuid: ^4.2.1
+  uuid: ^4.2.15
 
 dev_dependencies:
   flutter_test:

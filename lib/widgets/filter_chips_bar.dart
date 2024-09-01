@@ -1,42 +1,52 @@
+import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:dutask/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-typedef FilterToTextMapper<T> = String Function(T filter);
+class FilterChipsBar extends ConsumerWidget {
+  final Type selectedFilter;
 
-class FilterChipsBar<T> extends ConsumerWidget {
-  final StateProvider<T> selectedFilterProvider;
-  final List<T> filters;
-  final FilterToTextMapper<T> filterToText;
-
-  const FilterChipsBar.FilterChipsBar({
-    required this.selectedFilterProvider,
-    required this.filters,
-    required this.filterToText,
+  const FilterChipsBar({
+    required this.selectedFilter,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedFilter = ref.watch(selectedFilterProvider);
+    final selectedStatusFilterValue = ref.watch(taskStatusFilter);
+    final selectedDateFilterValue = ref.watch(taskDateFilter);
+
+    final List<Widget> filterChips =
+        selectedFilter.toString() == 'TaskStatusFilter'
+            ? TaskStatusFilter.values.map((filter) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FilterChip(
+                    label: Text(filter.mapToText()),
+                    selected: selectedStatusFilterValue == filter,
+                    onSelected: (_) =>
+                        ref.read(taskStatusFilter.notifier).state = filter,
+                  ),
+                );
+              }).toList()
+            : TaskDateFilter.values.map((filter) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FilterChip(
+                    label: Text(filter.mapToText()),
+                    selected: selectedDateFilterValue == filter,
+                    onSelected: (_) =>
+                        ref.read(taskDateFilter.notifier).state = filter,
+                  ),
+                );
+              }).toList();
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           SizedBox(width: 16),
-          ...filters.map(
-            (filter) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: FilterChip(
-                  label: Text(filterToText(filter)),
-                  selected: selectedFilter == filter,
-                  onSelected: (_) =>
-                      ref.read(selectedFilterProvider.notifier).state = filter,
-                ),
-              );
-            },
-          ).toList(),
+          ...filterChips, // Usa lo spread operator qui per espandere la lista
         ],
       ),
     );

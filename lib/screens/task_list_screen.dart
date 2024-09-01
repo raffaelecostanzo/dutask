@@ -1,8 +1,9 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/providers/quick_filter_provider.dart';
 import 'package:dutask/screens/task_form_screen.dart';
 import 'package:dutask/widgets/filter_navigation_bar.dart';
-import 'package:dutask/widgets/app_drawer.dart';
+import 'package:dutask/widgets/filter_settings_drawer.dart';
+import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dutask/widgets/filter_chips_bar.dart';
@@ -47,25 +48,26 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     final tasks = ref.watch(filteredTasks);
+    final currentQuickFilter = ref.watch(selectedQuickFilter);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dutask'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list_outlined),
-            onPressed: () => null,
-          )
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.filter_list_outlined),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              tooltip: 'Open quick filters settings',
+            ),
+          ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: MainDrawer(),
+      endDrawer: FilterSettingsDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FilterChipsBar<TaskStatusFilter>.FilterChipsBar(
-            selectedFilterProvider: taskStatusFilter,
-            filters: TaskStatusFilter.values,
-            filterToText: (filter) => filter.mapToText(),
-          ),
+          FilterChipsBar(selectedFilter: currentQuickFilter),
           Expanded(
             child: tasks.isEmpty
                 ? Center(
@@ -94,4 +96,46 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
       ),
     );
   }
+}
+
+void showRightDrawer(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return FractionallySizedBox(
+        widthFactor: 0.8, // Imposta la larghezza del Drawer personalizzato
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Filter 1'),
+                onTap: () {
+                  // Azione filtro 1
+                },
+              ),
+              ListTile(
+                title: const Text('Filter 2'),
+                onTap: () {
+                  // Azione filtro 2
+                },
+              ),
+              // Aggiungi più filtri qui
+            ],
+          ),
+        ),
+      );
+    },
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+  );
 }
