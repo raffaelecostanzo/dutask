@@ -13,37 +13,39 @@ class FilterSettingsDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentQuickFilter = ref.watch(selectedQuickFilter);
-    return Drawer(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 20, left: 20),
-            alignment: AlignmentDirectional.topStart,
-            child: Text('Quick filter settings',
-                style: Theme.of(context).textTheme.titleLarge),
-          ),
-          Divider(),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: quickFilters.map((filter) {
-                return RadioListTile(
-                  value: filter,
-                  groupValue: currentQuickFilter,
-                  onChanged: (onChangedFilter) {
-                    ref.read(selectedQuickFilter.notifier).state =
-                        onChangedFilter!;
-                    ref.read(taskStatusFilter.notifier).state =
-                        TaskStatusFilter.all;
-                    ref.read(taskDateFilter.notifier).state =
-                        TaskDateFilter.all;
-                  },
-                  title: Text(getTaskFilterName(filter)),
-                );
-              }).toList(),
+    return SafeArea(
+      child: Drawer(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 20, left: 20),
+              alignment: AlignmentDirectional.topStart,
+              child: Text('Quick filter settings',
+                  style: Theme.of(context).textTheme.titleLarge),
             ),
-          ),
-        ],
+            Divider(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: quickFilters.map((filter) {
+                  return RadioListTile(
+                    value: filter,
+                    groupValue: currentQuickFilter,
+                    onChanged: (onChangedFilter) {
+                      ref.read(selectedQuickFilter.notifier).state =
+                          onChangedFilter!;
+                      ref.read(taskStatusFilter.notifier).state =
+                          TaskStatusFilter.all;
+                      ref.read(taskDateFilter.notifier).state =
+                          TaskDateFilter.all;
+                    },
+                    title: Text(getTaskFilterName(filter)),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
