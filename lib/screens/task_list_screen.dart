@@ -1,7 +1,7 @@
+import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/providers/quick_filter_provider.dart';
 import 'package:dutask/screens/task_form_screen.dart';
-//import 'package:dutask/widgets/filter_navigation_bar.dart';
 import 'package:dutask/widgets/filter_settings_drawer.dart';
 import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
@@ -45,8 +45,26 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
     super.dispose();
   }
 
+  void _updateFabVisibility() {
+    if (!_scrollController.hasClients) return;
+
+    final maxScrollExtent = _scrollController.position.maxScrollExtent;
+    final isScrollable = maxScrollExtent > 0;
+
+    if (!isScrollable && !_isFloatingActionButtonVisible) {
+      setState(() {
+        _isFloatingActionButtonVisible = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen<List<TaskModel>>(filteredTasks, (previous, next) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateFabVisibility();
+      });
+    });
     final tasks = ref.watch(filteredTasks);
     final currentQuickFilter = ref.watch(selectedQuickFilter);
     return Scaffold(
@@ -83,7 +101,6 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
           ),
         ],
       ),
-      //bottomNavigationBar: FilterNavigationBar(),
       floatingActionButton: Visibility(
         visible: _isFloatingActionButtonVisible,
         child: FloatingActionButton(

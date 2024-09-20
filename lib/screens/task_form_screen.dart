@@ -118,6 +118,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
                     validator: (value) => FormValidator.title(value),
                     controller: _titleTextController,
                     maxLength: 63,
+                    autofocus: widget.task == null,
                     decoration: const InputDecoration(
                       label: Text('Title'),
                       border: OutlineInputBorder(),
