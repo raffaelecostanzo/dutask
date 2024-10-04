@@ -35,7 +35,8 @@ class TaskItem extends ConsumerWidget {
       onDismissed: (_) {
         final taskNotifier = ref.read(tasksProvider.notifier);
         taskNotifier.deleteTask(task.id);
-        context.showSnackBarWithUndo(taskNotifier, 'Task deleted successfully');
+        context.showTaskSnackBarWithUndo(
+            taskNotifier, 'Task deleted successfully');
       },
       child: ListTile(
         leading: Checkbox(

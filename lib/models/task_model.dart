@@ -1,10 +1,7 @@
-import 'package:uuid/uuid.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'task_model.freezed.dart';
 part 'task_model.g.dart';
-
-const uuid = Uuid();
 
 enum TaskStatus { active, started, completed }
 

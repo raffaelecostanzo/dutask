@@ -1,7 +1,9 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/providers/quick_filter_provider.dart';
+import 'package:dutask/screens/list_form_screen.dart';
 import 'package:dutask/screens/task_form_screen.dart';
+import 'package:dutask/widgets/expandable_fab.dart';
 import 'package:dutask/widgets/filter_settings_drawer.dart';
 import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
@@ -103,14 +105,28 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
       ),
       floatingActionButton: Visibility(
         visible: _isFloatingActionButtonVisible,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const TaskFormScreen(),
+        child: ExpandableFab(
+          distance: 64,
+          children: [
+            ActionButton(
+              icon: Icon(Icons.task),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TaskFormScreen(),
+                ),
+              ),
             ),
-          ),
+            ActionButton(
+              icon: Icon(Icons.list),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ListFormScreen(),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

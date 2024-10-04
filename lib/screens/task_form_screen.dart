@@ -94,7 +94,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
         snackBarMessage = 'Task created successfullly';
       }
       Navigator.of(context).pop();
-      context.showSnackBarWithUndo(taskNotifier, snackBarMessage);
+      context.showTaskSnackBarWithUndo(taskNotifier, snackBarMessage);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/providers/tasks_provider.dart';
 import 'package:dutask/utils/constants.dart';
 
@@ -59,7 +60,7 @@ extension BoolToggling on bool? {
 }
 
 extension ShowSnackBarWithUndo on BuildContext {
-  void showSnackBarWithUndo(
+  void showTaskSnackBarWithUndo(
       TasksNotifier taskNotifier, String snackBarMessage) {
     ScaffoldMessenger.of(this).clearSnackBars();
     ScaffoldMessenger.of(this).showSnackBar(
@@ -68,6 +69,20 @@ extension ShowSnackBarWithUndo on BuildContext {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () => taskNotifier.undo(),
+        ),
+      ),
+    );
+  }
+
+  void showListSnackBarWithUndo(
+      ListsNotifier listNotifier, String snackBarMessage) {
+    ScaffoldMessenger.of(this).clearSnackBars();
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(snackBarMessage),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () => listNotifier.undo(),
         ),
       ),
     );

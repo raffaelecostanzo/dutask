@@ -1,5 +1,6 @@
 import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/providers/lists_provider.dart';
+import 'package:dutask/screens/list_form_screen.dart';
 import 'package:dutask/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,12 @@ class MainDrawer extends ConsumerWidget {
                   return ListTile(
                     leading: Icon(iconMap[list.icon]),
                     title: Text(list.title),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListFormScreen(list: list),
+                      ),
+                    ),
                   );
                 }).toList(),
               ),
