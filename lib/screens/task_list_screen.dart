@@ -4,11 +4,11 @@ import 'package:dutask/providers/quick_filter_provider.dart';
 import 'package:dutask/screens/list_form_screen.dart';
 import 'package:dutask/screens/task_form_screen.dart';
 import 'package:dutask/widgets/expandable_fab.dart';
+import 'package:dutask/widgets/filter_chips_bar.dart';
 import 'package:dutask/widgets/filter_settings_drawer.dart';
 import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
-import 'package:dutask/widgets/filter_chips_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TaskListScreen extends ConsumerStatefulWidget {
@@ -26,18 +26,7 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      final isAtEdge = _scrollController.position.atEdge;
-      final isAtBottom = _scrollController.position.pixels > 0;
-
-      if (isAtEdge && isAtBottom && _isFloatingActionButtonVisible) {
-        setState(() {
-          _isFloatingActionButtonVisible = false;
-        });
-      } else if (!isAtEdge && !_isFloatingActionButtonVisible) {
-        setState(() {
-          _isFloatingActionButtonVisible = true;
-        });
-      }
+      _updateFabVisibility();
     });
   }
 
@@ -48,27 +37,36 @@ class _TaskListViewState extends ConsumerState<TaskListScreen> {
   }
 
   void _updateFabVisibility() {
-    if (!_scrollController.hasClients) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isScrollable = _scrollController.hasClients &&
+          _scrollController.position.maxScrollExtent > 0;
+      final isAtBottom = _scrollController.hasClients &&
+          _scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent;
 
-    final maxScrollExtent = _scrollController.position.maxScrollExtent;
-    final isScrollable = maxScrollExtent > 0;
-
-    if (!isScrollable && !_isFloatingActionButtonVisible) {
-      setState(() {
-        _isFloatingActionButtonVisible = true;
-      });
-    }
+      if (!isScrollable || !isAtBottom) {
+        if (!_isFloatingActionButtonVisible) {
+          setState(() {
+            _isFloatingActionButtonVisible = true;
+          });
+        }
+      } else if (isAtBottom && _isFloatingActionButtonVisible) {
+        setState(() {
+          _isFloatingActionButtonVisible = false;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<List<TaskModel>>(filteredTasks, (previous, next) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _updateFabVisibility();
-      });
-    });
     final tasks = ref.watch(filteredTasks);
     final currentQuickFilter = ref.watch(selectedQuickFilter);
+
+    ref.listen<List<TaskModel>>(filteredTasks, (previous, next) {
+      _updateFabVisibility();
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dutask'),

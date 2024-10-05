@@ -1,6 +1,7 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/extensions/task_date_extensions.dart';
+import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum TaskStatusFilter { all, started, active, completed }

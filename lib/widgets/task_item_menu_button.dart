@@ -1,7 +1,7 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
 import 'package:dutask/utils/constants.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:dutask/screens/task_form_screen.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +30,12 @@ class TaskItemMenuButton extends ConsumerWidget {
             );
           case Operation.delete:
             taskNotifier.deleteTask(task.id);
-            context.showTaskSnackBarWithUndo(
-                taskNotifier, 'Task deleted successfully');
+            context.showSnackBarWithUndo(
+                taskNotifier.undo, 'Task deleted successfully');
           case Operation.duplicate:
             taskNotifier.createTask(task.copyWith(id: uuid.v4()));
-            context.showTaskSnackBarWithUndo(
-                taskNotifier, 'Task duplicated successfully');
+            context.showSnackBarWithUndo(
+                taskNotifier.undo, 'Task duplicated successfully');
           default:
             null;
         }

@@ -1,5 +1,6 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/extensions/task_date_extensions.dart';
+import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +47,7 @@ class FilterChipsBar extends ConsumerWidget {
       child: Row(
         children: [
           SizedBox(width: 16),
-          ...filterChips, // Usa lo spread operator qui per espandere la lista
+          ...filterChips,
         ],
       ),
     );

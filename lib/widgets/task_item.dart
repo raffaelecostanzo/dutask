@@ -1,7 +1,8 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:dutask/screens/task_form_screen.dart';
+import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:dutask/widgets/task_item_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,8 +36,8 @@ class TaskItem extends ConsumerWidget {
       onDismissed: (_) {
         final taskNotifier = ref.read(tasksProvider.notifier);
         taskNotifier.deleteTask(task.id);
-        context.showTaskSnackBarWithUndo(
-            taskNotifier, 'Task deleted successfully');
+        context.showSnackBarWithUndo(
+            taskNotifier.undo, 'Task deleted successfully');
       },
       child: ListTile(
         leading: Checkbox(

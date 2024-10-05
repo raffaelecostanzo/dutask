@@ -1,6 +1,6 @@
 import 'package:dutask/data/default_tasks.dart';
 import 'package:dutask/models/task_model.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksNotifier extends Notifier<List<TaskModel>> {

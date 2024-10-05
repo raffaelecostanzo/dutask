@@ -1,14 +1,15 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
-import 'package:dutask/utils/extensions.dart';
+import 'package:dutask/utils/constants.dart';
+import 'package:dutask/utils/extensions/common_extensions.dart';
+import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:dutask/utils/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dutask/utils/constants.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
-  const TaskFormScreen({super.key, this.task});
+  const TaskFormScreen({Key? key, this.task}) : super(key: key);
 
   final TaskModel? task;
 
@@ -18,31 +19,31 @@ class TaskFormScreen extends ConsumerStatefulWidget {
 
 class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleTextController = TextEditingController();
-  final _dateTextController = TextEditingController();
-  final _descriptionTextController = TextEditingController();
+
+  String _screenTitle = 'New task';
+  String _title = '';
+  String _description = '';
   TaskStatus _status = TaskStatus.active;
+
+  final _dateTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (widget.task != null) {
-      _titleTextController.text = widget.task!.title;
+      _screenTitle = widget.task!.title;
+      _title = widget.task!.title;
+      _description = widget.task!.description ?? '';
+      _status = widget.task!.status;
       if (widget.task!.dueDate != null) {
         _dateTextController.text = dateFormat.format(widget.task!.dueDate!);
       }
-      if (widget.task!.description != null) {
-        _descriptionTextController.text = widget.task!.description!;
-      }
-      _status = widget.task!.status;
     }
   }
 
   @override
   void dispose() {
-    _titleTextController.dispose();
     _dateTextController.dispose();
-    _descriptionTextController.dispose();
     super.dispose();
   }
 
@@ -58,7 +59,9 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
       initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
     if (pickedDate != null) {
-      _dateTextController.text = dateFormat.format(pickedDate);
+      setState(() {
+        _dateTextController.text = dateFormat.format(pickedDate);
+      });
     }
   }
 
@@ -66,15 +69,15 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      String? snackBarMessage;
+      String snackBarMessage;
       final taskNotifier = ref.read(tasksProvider.notifier);
 
       if (widget.task != null) {
         taskNotifier.updateTask(
           widget.task!.id,
           widget.task!.copyWith(
-            title: _titleTextController.text,
-            description: _descriptionTextController.text,
+            title: _title,
+            description: _description,
             dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
           ),
@@ -84,113 +87,129 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
         taskNotifier.createTask(
           TaskModel(
             id: uuid.v4(),
-            title: _titleTextController.text,
-            description: _descriptionTextController.text,
+            title: _title,
+            description: _description,
             dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
             membershipLists: null,
           ),
         );
-        snackBarMessage = 'Task created successfullly';
+        snackBarMessage = 'Task created successfully';
       }
       Navigator.of(context).pop();
-      context.showTaskSnackBarWithUndo(taskNotifier, snackBarMessage);
+      context.showSnackBarWithUndo(taskNotifier.undo, snackBarMessage);
     }
+  }
+
+  Widget _buildTitleField() {
+    return TextFormField(
+      validator: (value) => FormValidator.title(value),
+      initialValue: _title,
+      maxLength: 63,
+      autofocus: widget.task == null,
+      decoration: const InputDecoration(
+        label: Text('Title'),
+        border: OutlineInputBorder(),
+      ),
+      onSaved: (value) {
+        _title = value!;
+      },
+    );
+  }
+
+  Widget _buildDueDateField() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: TextFormField(
+            validator: (value) => FormValidator.dueDate(value),
+            controller: _dateTextController,
+            maxLength: 10,
+            decoration: InputDecoration(
+              label: Text('Due date'),
+              hintText: dateFieldHintText,
+              counterText: '',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.datetime,
+            inputFormatters: [MaskTextInputFormatter(mask: '##/##/####')],
+          ),
+        ),
+        const SizedBox(width: 16),
+        OutlinedButton.icon(
+          label: const Text('Pick a date'),
+          onPressed: _showDatePicker,
+          icon: const Icon(Icons.edit_calendar),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusField() {
+    return Row(
+      children: [
+        Checkbox(
+          tristate: true,
+          value: _status.mapToTristate(),
+          onChanged: (value) {
+            setState(() {
+              _status = _status.toggle();
+            });
+          },
+        ),
+        const SizedBox(width: 16),
+        Text(
+          'Status: ${_status.mapToText()}',
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDescriptionField() {
+    return TextFormField(
+      initialValue: _description,
+      decoration: const InputDecoration(
+        label: Text('Description'),
+        border: OutlineInputBorder(),
+      ),
+      minLines: 5,
+      maxLines: 10,
+      onSaved: (value) {
+        _description = value ?? '';
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.task == null ? 'New task' : widget.task!.title),
+        title: Text(_screenTitle),
       ),
       body: SizedBox(
         height: double.infinity,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    validator: (value) => FormValidator.title(value),
-                    controller: _titleTextController,
-                    maxLength: 63,
-                    autofocus: widget.task == null,
-                    decoration: const InputDecoration(
-                      label: Text('Title'),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          validator: (value) => FormValidator.dueDate(value),
-                          controller: _dateTextController,
-                          maxLength: 10,
-                          decoration: InputDecoration(
-                            label: Text('Due date'),
-                            hintText: dateFieldHintText,
-                            counterText: '',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.datetime,
-                          inputFormatters: [
-                            MaskTextInputFormatter(mask: "##/##/####")
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      OutlinedButton.icon(
-                        label: Text('Pick a date'),
-                        onPressed: _showDatePicker,
-                        icon: const Icon(Icons.calendar_month),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Checkbox(
-                        tristate: true,
-                        value: _status.mapToTristate(),
-                        onChanged: (value) {
-                          setState(() {
-                            value = value.toggle();
-                            _status = _status.toggle();
-                          });
-                        },
-                      ),
-                      SizedBox(width: 16),
-                      Text(
-                        'Status: ${_status.mapToText()}',
-                        style: TextStyle(fontSize: 16),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _descriptionTextController,
-                    decoration: const InputDecoration(
-                      label: Text('Description'),
-                      border: OutlineInputBorder(),
-                    ),
-                    minLines: 5,
-                    maxLines: 10,
-                  ),
-                ],
-              ),
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              children: [
+                _buildTitleField(),
+                const SizedBox(height: 20),
+                _buildDueDateField(),
+                const SizedBox(height: 20),
+                _buildStatusField(),
+                const SizedBox(height: 20),
+                _buildDescriptionField(),
+              ],
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done),
+        child: const Icon(Icons.done),
         onPressed: _submit,
       ),
     );
