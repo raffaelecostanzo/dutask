@@ -17,7 +17,7 @@ class SettingsScreen extends ConsumerWidget {
           SettingsItem(
             currentValue: ref.watch(themeModeProvider),
             title: 'Theme',
-            icon: Icons.palette_outlined,
+            icon: Icons.palette,
             options: ThemeMode.values,
             onOptionChanged: (newValue) =>
                 ref.read(themeModeProvider.notifier).state = newValue,

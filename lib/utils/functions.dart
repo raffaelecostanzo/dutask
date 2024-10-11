@@ -21,3 +21,7 @@ String getTaskFilterName(Type type) {
       return 'Invalid filter';
   }
 }
+
+String getIconName(String iconName) {
+  return iconName.replaceAll('_', ' ').capitalize();
+}

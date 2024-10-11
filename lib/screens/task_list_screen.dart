@@ -10,75 +10,120 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'list_form_screen.dart';
 
-class TaskListScreen extends ConsumerWidget {
+class TaskListScreen extends ConsumerStatefulWidget {
   const TaskListScreen({super.key});
 
-  Widget build(BuildContext context, WidgetRef ref) {
+  @override
+  ConsumerState<TaskListScreen> createState() => _TaskListScreenState();
+}
+
+class _TaskListScreenState extends ConsumerState<TaskListScreen> {
+  bool _isFabVisible = true;
+
+  bool _updateFabVisibility(ScrollNotification scrollNotification) {
+    if (scrollNotification is ScrollUpdateNotification) {
+      if (scrollNotification.scrollDelta! > 0 && _isFabVisible) {
+        setState(() {
+          _isFabVisible = false;
+        });
+      } else if (scrollNotification.scrollDelta! < 0 && !_isFabVisible) {
+        setState(() {
+          _isFabVisible = true;
+        });
+      }
+    } else if (scrollNotification is OverscrollNotification) {
+      if (scrollNotification.overscroll > 0 && _isFabVisible) {
+        // Scrolling down
+        setState(() {
+          _isFabVisible = false;
+        });
+      } else if (scrollNotification.overscroll < 0 && !_isFabVisible) {
+        // Scrolling up
+        setState(() {
+          _isFabVisible = true;
+        });
+      }
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final tasks = ref.watch(filteredTasks);
     final currentQuickFilter = ref.watch(selectedQuickFilter);
 
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        title: const Text('Dutask'),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.filter_list_outlined),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              tooltip: 'Open quick filters settings',
-            ),
-          ),
-        ],
-      ),
-      drawer: MainDrawer(),
-      endDrawer: FilterSettingsDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FilterChipsBar(
-            selectedFilter: currentQuickFilter,
-          ),
-          Expanded(
-            child: tasks.isEmpty
-                ? Center(
-                    child: Text('There are no tasks at the moment.'),
-                  )
-                : ListView.builder(
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) => TaskItem(tasks[index]),
-                    padding: EdgeInsets.only(bottom: 192),
+    return SafeArea(
+      child: Scaffold(
+        drawer: MainDrawer(),
+        endDrawer: FilterSettingsDrawer(),
+        body: NotificationListener<ScrollNotification>(
+          onNotification: _updateFabVisibility,
+          child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                title: const Text('Dutask'),
+                actions: [
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: Icon(Icons.filter_list),
+                      onPressed: () => Scaffold.of(context).openEndDrawer(),
+                    ),
                   ),
-          ),
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'list',
-            tooltip: 'List',
-            child: Icon(Icons.list),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ListFormScreen(),
+                ],
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(48),
+                  child: FilterChipsBar(
+                    selectedFilter: currentQuickFilter,
+                  ),
+                ),
               ),
-            ),
+              tasks.isEmpty
+                  ? SliverFillRemaining(
+                      child: Center(
+                        child: Text('There are no tasks at the moment.'),
+                      ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => TaskItem(tasks[index]),
+                        childCount: tasks.length,
+                      ),
+                    ),
+            ],
           ),
-          SizedBox(height: 24),
-          FloatingActionButton(
-            heroTag: 'task',
-            tooltip: 'Task',
-            child: Icon(Icons.task),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const TaskFormScreen(),
+        ),
+        floatingActionButton: Visibility(
+          visible: _isFabVisible,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: 'list',
+                child: Icon(Icons.list),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ListFormScreen(),
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 16),
+              FloatingActionButton(
+                heroTag: 'task',
+                child: Icon(Icons.task),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TaskFormScreen(),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

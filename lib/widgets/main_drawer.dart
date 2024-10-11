@@ -25,25 +25,30 @@ class MainDrawer extends ConsumerWidget {
             ),
             Divider(),
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: lists.map((list) {
-                  return ListTile(
-                    leading: Icon(iconMap[list.icon]),
-                    title: Text(list.title),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListFormScreen(list: list),
-                      ),
+              child: lists.isEmpty
+                  ? Center(
+                      child: Text("There are no lists at the moment."),
+                    )
+                  : ListView(
+                      padding: EdgeInsets.zero,
+                      children: lists
+                          .map((list) => ListTile(
+                                leading: Icon(iconMap[list.icon]),
+                                title: Text(list.title),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ListFormScreen(list: list),
+                                  ),
+                                ),
+                              ))
+                          .toList(),
                     ),
-                  );
-                }).toList(),
-              ),
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.settings_outlined),
+              leading: Icon(Icons.settings),
               title: const Text('Settings'),
               selected: false,
               onTap: () {
@@ -56,7 +61,7 @@ class MainDrawer extends ConsumerWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.help_outline),
+              leading: Icon(Icons.help),
               title: const Text('Help and Feedback'),
               selected: false,
               onTap: () {
@@ -64,7 +69,7 @@ class MainDrawer extends ConsumerWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.info_outline),
+              leading: Icon(Icons.info),
               title: const Text('About'),
               selected: false,
               onTap: () {

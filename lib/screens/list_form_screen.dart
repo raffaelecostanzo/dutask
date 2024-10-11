@@ -3,6 +3,7 @@ import 'package:dutask/models/list_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:dutask/utils/form_validator.dart';
+import 'package:dutask/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -69,43 +70,31 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
     }
   }
 
+  void _delete() {
+    final listNotifier = ref.read(listsProvider.notifier);
+    listNotifier.deleteList(widget.list!.id);
+    Navigator.of(context).pop();
+    context.showSnackBarWithUndo(
+        listNotifier.undo, 'List deleted successfully');
+  }
+
   Widget _buildIconDropdown() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'Icon:',
-          style: TextStyle(fontSize: 16),
-        ),
-        const SizedBox(width: 20),
-        DropdownButton<String>(
-          focusColor: Colors.transparent,
-          value: _icon,
-          icon: Icon(iconMap[_icon]),
-          elevation: 16,
-          onChanged: (value) {
-            setState(() {
-              _icon = value!;
-            });
-          },
-          selectedItemBuilder: (BuildContext context) {
-            return iconMap.keys.map<Widget>((String value) {
-              return Row(
-                children: [Text(value), const SizedBox(width: 16)],
-              );
-            }).toList();
-          },
-          items: iconMap.keys.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text(value), Icon(iconMap[value])],
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+    return DropdownMenu(
+      initialSelection: _icon,
+      leadingIcon: Icon(iconMap[_icon]),
+      label: Text('List'),
+      onSelected: (String? value) {
+        setState(() {
+          _icon = value!;
+        });
+      },
+      dropdownMenuEntries: iconMap.keys.map((icon) {
+        return DropdownMenuEntry(
+          value: icon,
+          label: getIconName(icon),
+          leadingIcon: Icon(iconMap[icon]),
+        );
+      }).toList(),
     );
   }
 
@@ -114,6 +103,9 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_screenTitle),
+        actions: widget.list != null
+            ? [IconButton(icon: Icon(Icons.delete), onPressed: _delete)]
+            : null,
       ),
       body: SizedBox(
         height: double.infinity,
@@ -138,7 +130,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
                 ),
                 const SizedBox(height: 20),
                 _buildIconDropdown(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 TextFormField(
                   initialValue: _description,
                   decoration: const InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:dutask/models/task_model.dart';
+import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/providers/tasks_provider.dart';
 import 'package:dutask/utils/constants.dart';
 import 'package:dutask/utils/extensions/common_extensions.dart';
@@ -7,6 +8,8 @@ import 'package:dutask/utils/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import '../data/list_icons.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
   const TaskFormScreen({Key? key, this.task}) : super(key: key);
@@ -24,6 +27,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   String _title = '';
   String _description = '';
   TaskStatus _status = TaskStatus.active;
+  String? _listId = '';
 
   final _dateTextController = TextEditingController();
 
@@ -35,6 +39,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
       _title = widget.task!.title;
       _description = widget.task!.description ?? '';
       _status = widget.task!.status;
+      _listId = widget.task!.listId;
       if (widget.task!.dueDate != null) {
         _dateTextController.text = dateFormat.format(widget.task!.dueDate!);
       }
@@ -80,6 +85,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
             description: _description,
             dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
+            listId: _listId,
           ),
         );
         snackBarMessage = 'Task updated successfully';
@@ -91,7 +97,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
             description: _description,
             dueDate: _dateTextController.text.getDateOrNull(),
             status: _status,
-            membershipLists: null,
+            listId: _listId,
           ),
         );
         snackBarMessage = 'Task created successfully';
@@ -129,7 +135,7 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
             decoration: InputDecoration(
               label: Text('Due date'),
               hintText: dateFieldHintText,
-              counterText: '',
+              counterText: null,
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.datetime,
@@ -160,10 +166,45 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
         ),
         const SizedBox(width: 16),
         Text(
-          'Status: ${_status.mapToText()}',
-          style: const TextStyle(fontSize: 16),
+          'Status:',
+          style: const TextStyle(
+            fontSize: 16,
+          ),
         ),
+        SizedBox(width: 16),
+        Text(
+          _status.mapToText(),
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        )
       ],
+    );
+  }
+
+  Widget _buildListField() {
+    final lists = ref.read(listsProvider);
+    final selectedList = lists.firstWhere(
+      (list) => list.id == _listId,
+      orElse: () => lists.first,
+    );
+
+    return DropdownMenu(
+      initialSelection: selectedList.id,
+      leadingIcon: Icon(iconMap[selectedList.icon]),
+      label: Text('List'),
+      onSelected: (String? value) {
+        setState(() {
+          _listId = value!;
+        });
+      },
+      dropdownMenuEntries: lists.map((list) {
+        return DropdownMenuEntry(
+          value: list.id,
+          label: list.title,
+          leadingIcon: Icon(iconMap[list.icon]),
+        );
+      }).toList(),
     );
   }
 
@@ -182,11 +223,22 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
     );
   }
 
+  void _delete() {
+    final taskNotifier = ref.read(tasksProvider.notifier);
+    taskNotifier.deleteTask(widget.task!.id);
+    Navigator.of(context).pop();
+    context.showSnackBarWithUndo(
+        taskNotifier.undo, 'Task deleted successfully');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_screenTitle),
+        actions: widget.task != null
+            ? [IconButton(icon: Icon(Icons.delete), onPressed: _delete)]
+            : null,
       ),
       body: SizedBox(
         height: double.infinity,
@@ -201,7 +253,9 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
                 _buildDueDateField(),
                 const SizedBox(height: 20),
                 _buildStatusField(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
+                _buildListField(),
+                const SizedBox(height: 40),
                 _buildDescriptionField(),
               ],
             ),

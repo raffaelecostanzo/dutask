@@ -12,7 +12,7 @@ class TaskModel with _$TaskModel {
     required String? description,
     required DateTime? dueDate,
     required TaskStatus status,
-    required List? membershipLists,
+    required String? listId,
     required String id,
   }) = _TaskModel;
 
