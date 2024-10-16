@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../widgets/dropdownmenu_formfield.dart';
+
 class ListFormScreen extends ConsumerStatefulWidget {
   const ListFormScreen({super.key, this.list});
 
@@ -79,14 +81,25 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
   }
 
   Widget _buildIconDropdown() {
-    return DropdownMenu(
-      initialSelection: _icon,
+    return DropdownMenuFormField<String>(
+      requestFocusOnTap: true,
+      width: MediaQuery.of(context).size.width - 32,
+      initialValue: _icon,
       leadingIcon: Icon(iconMap[_icon]),
-      label: Text('List'),
-      onSelected: (String? value) {
-        setState(() {
-          _icon = value!;
-        });
+      label: Text('Icon'),
+      onSaved: (String? value) {
+        if (value != null) {
+          _icon = value;
+        }
+      },
+      validator: (String? value) =>
+          FormValidator.icon(value, iconMap.keys.toList()),
+      onChanged: (String? value) {
+        if (value != null) {
+          setState(() {
+            _icon = value;
+          });
+        }
       },
       dropdownMenuEntries: iconMap.keys.map((icon) {
         return DropdownMenuEntry(
@@ -107,44 +120,41 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
             ? [IconButton(icon: Icon(Icons.delete), onPressed: _delete)]
             : null,
       ),
-      body: SizedBox(
-        height: double.infinity,
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ListView(
-              children: [
-                TextFormField(
-                  initialValue: _title,
-                  maxLength: 63,
-                  autofocus: widget.list == null,
-                  decoration: const InputDecoration(
-                    label: Text('Title'),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) => FormValidator.title(value),
-                  onSaved: (value) {
-                    _title = value!;
-                  },
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView(
+            children: [
+              TextFormField(
+                initialValue: _title,
+                maxLength: 63,
+                autofocus: widget.list == null,
+                decoration: const InputDecoration(
+                  label: Text('Title'),
+                  border: OutlineInputBorder(),
                 ),
-                const SizedBox(height: 20),
-                _buildIconDropdown(),
-                const SizedBox(height: 40),
-                TextFormField(
-                  initialValue: _description,
-                  decoration: const InputDecoration(
-                    label: Text('Description'),
-                    border: OutlineInputBorder(),
-                  ),
-                  minLines: 5,
-                  maxLines: 10,
-                  onSaved: (value) {
-                    _description = value ?? '';
-                  },
+                validator: (value) => FormValidator.title(value),
+                onSaved: (value) {
+                  _title = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildIconDropdown(),
+              const SizedBox(height: 40),
+              TextFormField(
+                initialValue: _description,
+                decoration: const InputDecoration(
+                  label: Text('Description'),
+                  border: OutlineInputBorder(),
                 ),
-              ],
-            ),
+                minLines: 5,
+                maxLines: 10,
+                onSaved: (value) {
+                  _description = value ?? '';
+                },
+              ),
+            ],
           ),
         ),
       ),

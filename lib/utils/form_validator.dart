@@ -6,6 +6,16 @@ class FormValidator {
     return null;
   }
 
+  static String? icon(String? iconName, List<String> iconList) {
+    if (!iconList.contains(iconName)) return 'Enter a valid icon name';
+    return null;
+  }
+
+  static String? list(String? listName, List<String> list) {
+    if (!list.contains(listName)) return 'Enter a valid list name';
+    return null;
+  }
+
   static String? dueDate(String? dueDate) {
     if (dueDate == null || dueDate.isEmpty) return null;
     try {

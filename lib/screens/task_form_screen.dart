@@ -5,6 +5,7 @@ import 'package:dutask/utils/constants.dart';
 import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:dutask/utils/form_validator.dart';
+import 'package:dutask/widgets/dropdownmenu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -124,61 +125,54 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   }
 
   Widget _buildDueDateField() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: TextFormField(
-            validator: (value) => FormValidator.dueDate(value),
-            controller: _dateTextController,
-            maxLength: 10,
-            decoration: InputDecoration(
-              label: Text('Due date'),
-              hintText: dateFieldHintText,
-              counterText: null,
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.datetime,
-            inputFormatters: [MaskTextInputFormatter(mask: '##/##/####')],
+    return TextFormField(
+      validator: (value) => FormValidator.dueDate(value),
+      controller: _dateTextController,
+      maxLength: 10,
+      decoration: InputDecoration(
+        label: Text('Due date'),
+        hintText: dateFieldHintText,
+        counterText: '',
+        border: OutlineInputBorder(),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: IconButton(
+            icon: Icon(Icons.edit_calendar),
+            onPressed: _showDatePicker,
           ),
         ),
-        const SizedBox(width: 16),
-        OutlinedButton.icon(
-          label: const Text('Pick a date'),
-          onPressed: _showDatePicker,
-          icon: const Icon(Icons.edit_calendar),
-        ),
-      ],
+      ),
+      keyboardType: TextInputType.datetime,
+      inputFormatters: [MaskTextInputFormatter(mask: '##/##/####')],
     );
   }
 
   Widget _buildStatusField() {
-    return Row(
-      children: [
-        Checkbox(
-          tristate: true,
-          value: _status.mapToTristate(),
-          onChanged: (value) {
-            setState(() {
-              _status = _status.toggle();
-            });
-          },
-        ),
-        const SizedBox(width: 16),
-        Text(
-          'Status:',
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        SizedBox(width: 16),
-        Text(
-          _status.mapToText(),
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        )
-      ],
+    return DropdownMenuFormField<TaskStatus>(
+      requestFocusOnTap: false,
+      width: MediaQuery.of(context).size.width - 32,
+      initialValue: _status,
+      leadingIcon: Icon(_status.mapToIcon()),
+      label: Text('Status'),
+      onSaved: (TaskStatus? value) {
+        if (value != null) {
+          _status = value;
+        }
+      },
+      onChanged: (TaskStatus? value) {
+        if (value != null) {
+          setState(() {
+            _status = value;
+          });
+        }
+      },
+      dropdownMenuEntries: TaskStatus.values.map((status) {
+        return DropdownMenuEntry(
+          value: status,
+          label: status.mapToText(),
+          leadingIcon: Icon(status.mapToIcon()),
+        );
+      }).toList(),
     );
   }
 
@@ -189,14 +183,27 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
       orElse: () => lists.first,
     );
 
-    return DropdownMenu(
-      initialSelection: selectedList.id,
+    return DropdownMenuFormField<String?>(
+      requestFocusOnTap: true,
+      width: MediaQuery.of(context).size.width - 32,
+      initialValue: _listId,
       leadingIcon: Icon(iconMap[selectedList.icon]),
       label: Text('List'),
-      onSelected: (String? value) {
-        setState(() {
-          _listId = value!;
-        });
+      onSaved: (String? value) {
+        if (value != null) {
+          _listId = value;
+        }
+      },
+      validator: (String? value) => FormValidator.list(
+        value,
+        lists.map((e) => e.id).toList(),
+      ),
+      onChanged: (String? value) {
+        if (value != null) {
+          setState(() {
+            _listId = value;
+          });
+        }
       },
       dropdownMenuEntries: lists.map((list) {
         return DropdownMenuEntry(
@@ -251,9 +258,9 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
                 _buildTitleField(),
                 const SizedBox(height: 20),
                 _buildDueDateField(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 _buildStatusField(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 40),
                 _buildListField(),
                 const SizedBox(height: 40),
                 _buildDescriptionField(),

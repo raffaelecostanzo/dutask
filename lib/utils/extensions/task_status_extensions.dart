@@ -1,5 +1,6 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:flutter/material.dart';
 
 extension TaskStatusMapping on TaskStatus {
   bool? mapToTristate() {
@@ -21,6 +22,17 @@ extension TaskStatusMapping on TaskStatus {
         return 'Started';
       case TaskStatus.completed:
         return 'Completed';
+    }
+  }
+
+  IconData mapToIcon() {
+    switch (this) {
+      case TaskStatus.active:
+        return Icons.assignment;
+      case TaskStatus.started:
+        return Icons.autorenew;
+      case TaskStatus.completed:
+        return Icons.check;
     }
   }
 
