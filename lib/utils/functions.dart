@@ -2,11 +2,10 @@ import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:flutter/material.dart';
 
 String dynamicToString(dynamic object) {
-  switch (object.runtimeType) {
-    case ThemeMode:
-      return (object as ThemeMode).mapToString();
-    default:
-      return '';
+  if (object is ThemeMode) {
+    return object.mapToString();
+  } else {
+    return '';
   }
 }
 

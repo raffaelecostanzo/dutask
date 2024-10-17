@@ -9,8 +9,8 @@ class FilterChipsBar extends ConsumerWidget {
 
   const FilterChipsBar({
     required this.selectedFilter,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

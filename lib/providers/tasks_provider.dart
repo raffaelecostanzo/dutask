@@ -39,7 +39,7 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
 
   void deleteTask(String taskId) {
     previousState = [...state];
-    state = [...state.where((task) => task.id != taskId).toList()];
+    state = [...state.where((task) => task.id != taskId)];
   }
 
   void undo() {

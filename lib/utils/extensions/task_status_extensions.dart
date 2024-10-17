@@ -28,7 +28,7 @@ extension TaskStatusMapping on TaskStatus {
   IconData mapToIcon() {
     switch (this) {
       case TaskStatus.active:
-        return Icons.assignment;
+        return Icons.radio_button_unchecked;
       case TaskStatus.started:
         return Icons.autorenew;
       case TaskStatus.completed:
@@ -38,7 +38,7 @@ extension TaskStatusMapping on TaskStatus {
 
   bool equalsToFilter(TaskStatusFilter taskStatusFilter) {
     if (taskStatusFilter == TaskStatusFilter.all) return true;
-    return taskStatusFilter.name == this.name;
+    return taskStatusFilter.name == name;
   }
 
   TaskStatus toggle() {

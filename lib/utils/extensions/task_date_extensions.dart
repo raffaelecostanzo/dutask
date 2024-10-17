@@ -22,19 +22,6 @@ extension DateTimeMapping on DateTime? {
 }
 
 extension TaskDateFilterMapping on TaskDateFilter {
-  int mapToBottomNavigationBarIndex() {
-    switch (this) {
-      case TaskDateFilter.all:
-        return 0;
-      case TaskDateFilter.yesterday:
-        return 1;
-      case TaskDateFilter.today:
-        return 2;
-      case TaskDateFilter.tomorrow:
-        return 3;
-    }
-  }
-
   String mapToText() {
     switch (this) {
       case TaskDateFilter.all:
@@ -45,23 +32,6 @@ extension TaskDateFilterMapping on TaskDateFilter {
         return 'Today';
       case TaskDateFilter.tomorrow:
         return 'Tomorrow';
-    }
-  }
-}
-
-extension IntMapping on int {
-  TaskDateFilter mapToDateFilter() {
-    switch (this) {
-      case 0:
-        return TaskDateFilter.all;
-      case 1:
-        return TaskDateFilter.yesterday;
-      case 2:
-        return TaskDateFilter.today;
-      case 3:
-        return TaskDateFilter.tomorrow;
-      default:
-        return TaskDateFilter.all;
     }
   }
 }

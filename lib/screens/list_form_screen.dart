@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../widgets/dropdownmenu_formfield.dart';
+import '../widgets/dropdown_menu_formfield.dart';
 
 class ListFormScreen extends ConsumerStatefulWidget {
   const ListFormScreen({super.key, this.list});
@@ -26,7 +26,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
   String _screenTitle = "New list";
   String _title = '';
   String _description = '';
-  String _icon = 'list';
+  String _icon = '';
 
   @override
   void initState() {
@@ -85,15 +85,17 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
       requestFocusOnTap: true,
       width: MediaQuery.of(context).size.width - 32,
       initialValue: _icon,
-      leadingIcon: Icon(iconMap[_icon]),
+      leadingIcon: Icon(_icon != '' ? iconMap[_icon] : Icons.question_mark),
       label: Text('Icon'),
       onSaved: (String? value) {
         if (value != null) {
           _icon = value;
         }
       },
-      validator: (String? value) =>
-          FormValidator.icon(value, iconMap.keys.toList()),
+      validator: (String? value) => FormValidator.icon(
+        value,
+        iconMap.keys.toList(),
+      ),
       onChanged: (String? value) {
         if (value != null) {
           setState(() {

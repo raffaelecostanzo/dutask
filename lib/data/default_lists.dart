@@ -17,7 +17,7 @@ final defaultLists = [
   ListModel(
     title: 'Important',
     description: 'Important lists.',
-    icon: 'beach_access',
+    icon: 'people',
     id: uuid.v4(),
   ),
   ListModel(
@@ -29,13 +29,13 @@ final defaultLists = [
   ListModel(
     title: 'Food',
     description: 'Food I have to try.',
-    icon: 'list',
+    icon: 'park',
     id: uuid.v4(),
   ),
   ListModel(
     title: 'Medicine',
     description: 'Medicines I need to take.',
-    icon: 'account_circle',
+    icon: 'people',
     id: uuid.v4(),
   ),
   ListModel(
@@ -59,7 +59,7 @@ final defaultLists = [
   ListModel(
     title: 'Absurdities',
     description: 'Is this real? Or am I too low for this?',
-    icon: 'account_circle',
+    icon: 'people',
     id: uuid.v4(),
   ),
   ListModel(

@@ -8,23 +8,18 @@ class DropdownMenuFormField<T> extends FormField<T> {
   final bool requestFocusOnTap;
 
   DropdownMenuFormField({
-    Key? key,
+    super.key,
     required this.dropdownMenuEntries,
     this.leadingIcon,
     this.label,
     this.width,
     this.requestFocusOnTap = true,
-    T? initialValue,
-    FormFieldSetter<T>? onSaved,
-    FormFieldValidator<T>? validator,
+    super.initialValue,
+    super.onSaved,
+    super.validator,
     ValueChanged<T?>? onChanged,
-    AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
+    AutovalidateMode super.autovalidateMode = AutovalidateMode.disabled,
   }) : super(
-          key: key,
-          initialValue: initialValue,
-          onSaved: onSaved,
-          validator: validator,
-          autovalidateMode: autovalidateMode,
           builder: (FormFieldState<T> state) {
             return DropdownMenu<T>(
               errorText: state.errorText,

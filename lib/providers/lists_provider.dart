@@ -29,7 +29,7 @@ class ListsNotifier extends Notifier<List<ListModel>> {
 
   void deleteList(String listId) {
     previousState = [...state];
-    state = [...state.where((list) => list.id != listId).toList()];
+    state = [...state.where((list) => list.id != listId)];
   }
 
   void undo() {

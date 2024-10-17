@@ -5,7 +5,7 @@ import 'package:dutask/utils/constants.dart';
 import 'package:dutask/utils/extensions/common_extensions.dart';
 import 'package:dutask/utils/extensions/task_status_extensions.dart';
 import 'package:dutask/utils/form_validator.dart';
-import 'package:dutask/widgets/dropdownmenu_formfield.dart';
+import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -13,7 +13,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../data/list_icons.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
-  const TaskFormScreen({Key? key, this.task}) : super(key: key);
+  const TaskFormScreen({super.key, this.task});
 
   final TaskModel? task;
 
@@ -187,7 +187,8 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
       requestFocusOnTap: true,
       width: MediaQuery.of(context).size.width - 32,
       initialValue: _listId,
-      leadingIcon: Icon(iconMap[selectedList.icon]),
+      leadingIcon: Icon(
+          _listId != '' ? iconMap[selectedList.icon] : Icons.question_mark),
       label: Text('List'),
       onSaved: (String? value) {
         if (value != null) {

@@ -18,8 +18,8 @@ extension SnackBarShow on BuildContext {
 
 extension StringUtils on String {
   String capitalize() {
-    if (this.isEmpty) return '';
-    return '${this[0].toUpperCase()}${this.substring(1).toLowerCase()}';
+    if (isEmpty) return '';
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
 }
 
@@ -38,7 +38,7 @@ extension ThemeModeMapping on ThemeMode {
 
 extension DateFormatting on String {
   DateTime? getDateOrNull() {
-    if (this.isEmpty) return null;
+    if (isEmpty) return null;
     try {
       return dateFormat.parse(this);
     } catch (_) {
