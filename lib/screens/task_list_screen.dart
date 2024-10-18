@@ -21,34 +21,61 @@ class TaskListScreen extends ConsumerWidget {
     return Scaffold(
       drawer: MainDrawer(),
       endDrawer: FilterSettingsDrawer(),
-      appBar: AppBar(
-        title: const Text('Dutask'),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.filter_list),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Text('Dutask'),
+              snap: true,
+              floating: true,
+              actions: [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(Icons.filter_list),
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(64),
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 16.0),
-            child: FilterChipsBar(
-              selectedFilter: currentQuickFilter,
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverFilterChipsBarDelegate(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: FilterChipsBar(
+                          selectedFilter: currentQuickFilter,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
+            tasks.isEmpty
+                ? SliverFillRemaining(
+                    child: Center(
+                      child: Text('There are no tasks at the moment.'),
+                    ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => TaskItem(tasks[index]),
+                      childCount: tasks.length,
+                    ),
+                  ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 128), // Spazio vuoto di 128px
+            ),
+          ],
         ),
       ),
-      body: tasks.isEmpty
-          ? Center(
-              child: Text('There are no tasks at the moment.'),
-            )
-          : ListView.builder(
-              padding: EdgeInsets.only(bottom: 128),
-              itemCount: tasks.length,
-              itemBuilder: (_, index) => TaskItem(tasks[index])),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -80,5 +107,30 @@ class TaskListScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class _SliverFilterChipsBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  _SliverFilterChipsBarDelegate({required this.child});
+
+  @override
+  double get minExtent => 72.0;
+  @override
+  double get maxExtent => 72.0;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverFilterChipsBarDelegate oldDelegate) {
+    return oldDelegate.child != child;
   }
 }

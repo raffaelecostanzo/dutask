@@ -30,10 +30,21 @@ class SettingsItem extends StatelessWidget {
           builder: (context) {
             return Column(
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: IconButton(
+                          onPressed: Navigator.of(context).pop,
+                          icon: Icon(Icons.close)),
+                    ),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
                 ),
+                Divider(),
                 Expanded(
                   child: ListView(
                     children: options.map((option) {

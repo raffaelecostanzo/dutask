@@ -1,6 +1,6 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/utils/extensions/task_date_extensions.dart';
-import 'package:dutask/utils/extensions/task_status_extensions.dart';
+import 'package:dutask/extensions/task_date_extensions.dart';
+import 'package:dutask/extensions/task_status_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,7 +21,7 @@ class FilterChipsBar extends ConsumerWidget {
         selectedFilter.toString() == 'TaskStatusFilter'
             ? TaskStatusFilter.values.map((filter) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: FilterChip(
                     label: Text(filter.mapToText()),
                     selected: selectedStatusFilterValue == filter,

@@ -1,7 +1,7 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
 import 'package:dutask/utils/constants.dart';
-import 'package:dutask/utils/extensions/common_extensions.dart';
+import 'package:dutask/extensions/common_extensions.dart';
 import 'package:dutask/screens/task_form_screen.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:dutask/utils/extensions/common_extensions.dart';
+import 'package:dutask/extensions/common_extensions.dart';
 import 'package:flutter/material.dart';
 
 String dynamicToString(dynamic object) {
