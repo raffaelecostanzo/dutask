@@ -3,7 +3,6 @@ import 'package:dutask/themes/default_themes.dart';
 import 'package:dutask/screens/task_list_screen.dart';
 import 'package:dutask/widgets/system_ui_themer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
