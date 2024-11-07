@@ -1,7 +1,8 @@
 import 'package:dutask/data/quick_filters.dart';
+import 'package:dutask/extensions/common_extensions.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/providers/quick_filter_provider.dart';
-import 'package:dutask/utils/functions.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +40,7 @@ class FilterSettingsDrawer extends ConsumerWidget {
                       ref.read(taskDateFilter.notifier).state =
                           TaskDateFilter.all;
                     },
-                    title: Text(getTaskFilterName(filter)),
+                    title: Text(filter.mapToText()),
                   );
                 }).toList(),
               ),

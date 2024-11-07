@@ -3,21 +3,9 @@ import 'package:flutter/material.dart';
 
 String dynamicToString(dynamic object) {
   if (object is ThemeMode) {
-    return object.mapToString();
+    return object.mapToText();
   } else {
     return '';
-  }
-}
-
-String getTaskFilterName(Type type) {
-  final typeName = type.toString();
-  switch (typeName) {
-    case 'TaskStatusFilter':
-      return 'Status';
-    case 'TaskDateFilter':
-      return 'Date';
-    default:
-      return 'Invalid filter';
   }
 }
 

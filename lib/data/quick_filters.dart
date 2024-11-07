@@ -1,3 +1,3 @@
-import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:dutask/utils/constants.dart';
 
-final quickFilters = [TaskStatusFilter, TaskDateFilter];
+final quickFilters = FilterType.values;

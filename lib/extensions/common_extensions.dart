@@ -24,15 +24,12 @@ extension StringUtils on String {
 }
 
 extension ThemeModeMapping on ThemeMode {
-  String mapToString() {
-    switch (this) {
-      case ThemeMode.system:
-        return 'System default';
-      case ThemeMode.light:
-        return 'Light';
-      case ThemeMode.dark:
-        return 'Dark';
-    }
+  String mapToText() {
+    return switch (this) {
+      ThemeMode.system => 'System default',
+      ThemeMode.light => 'Light',
+      ThemeMode.dark => 'Dark'
+    };
   }
 }
 
@@ -44,5 +41,14 @@ extension DateFormatting on String {
     } catch (_) {
       return null;
     }
+  }
+}
+
+extension FilterTypeMapping on FilterType {
+  String mapToText() {
+    return switch (this) {
+      FilterType.status => 'Status',
+      FilterType.dueDate => 'Date'
+    };
   }
 }

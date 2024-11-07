@@ -4,36 +4,27 @@ import 'package:flutter/material.dart';
 
 extension TaskStatusMapping on TaskStatus {
   bool? mapToTristate() {
-    switch (this) {
-      case TaskStatus.active:
-        return false;
-      case TaskStatus.started:
-        return null;
-      case TaskStatus.completed:
-        return true;
-    }
+    return switch (this) {
+      TaskStatus.active => false,
+      TaskStatus.started => null,
+      TaskStatus.completed => true,
+    };
   }
 
   String mapToText() {
-    switch (this) {
-      case TaskStatus.active:
-        return 'Active';
-      case TaskStatus.started:
-        return 'Started';
-      case TaskStatus.completed:
-        return 'Completed';
-    }
+    return switch (this) {
+      TaskStatus.active => 'Active',
+      TaskStatus.started => 'Started',
+      TaskStatus.completed => 'Completed',
+    };
   }
 
   IconData mapToIcon() {
-    switch (this) {
-      case TaskStatus.active:
-        return Icons.radio_button_unchecked;
-      case TaskStatus.started:
-        return Icons.autorenew;
-      case TaskStatus.completed:
-        return Icons.check;
-    }
+    return switch (this) {
+      TaskStatus.active => Icons.radio_button_unchecked,
+      TaskStatus.started => Icons.autorenew,
+      TaskStatus.completed => Icons.check,
+    };
   }
 
   bool equalsToFilter(TaskStatusFilter taskStatusFilter) {
@@ -42,41 +33,31 @@ extension TaskStatusMapping on TaskStatus {
   }
 
   TaskStatus toggle() {
-    switch (this) {
-      case TaskStatus.active:
-        return TaskStatus.started;
-      case TaskStatus.started:
-        return TaskStatus.completed;
-      case TaskStatus.completed:
-        return TaskStatus.active;
-    }
+    return switch (this) {
+      TaskStatus.active => TaskStatus.started,
+      TaskStatus.started => TaskStatus.completed,
+      TaskStatus.completed => TaskStatus.active,
+    };
   }
 }
 
 extension TaskStatusBoolToggling on bool? {
   bool? toggle() {
-    switch (this) {
-      case false:
-        return null;
-      case null:
-        return true;
-      case true:
-        return false;
-    }
+    return switch (this) {
+      false => null,
+      null => true,
+      true => false,
+    };
   }
 }
 
 extension TaskStatusFilterMapping on TaskStatusFilter {
   String mapToText() {
-    switch (this) {
-      case TaskStatusFilter.all:
-        return 'All';
-      case TaskStatusFilter.active:
-        return 'Active';
-      case TaskStatusFilter.started:
-        return 'Started';
-      case TaskStatusFilter.completed:
-        return 'Completed';
-    }
+    return switch (this) {
+      TaskStatusFilter.all => 'All',
+      TaskStatusFilter.active => 'Active',
+      TaskStatusFilter.started => 'Started',
+      TaskStatusFilter.completed => 'Completed',
+    };
   }
 }

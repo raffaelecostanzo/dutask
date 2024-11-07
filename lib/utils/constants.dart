@@ -6,3 +6,5 @@ final dateFormat = DateFormat('dd/MM/yyyy');
 final dateFieldHintText = dateFormat.pattern;
 
 const uuid = Uuid();
+
+enum FilterType { status, dueDate }

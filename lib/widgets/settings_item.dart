@@ -25,6 +25,7 @@ class SettingsItem extends StatelessWidget {
       subtitle: Text(dynamicToString(currentValue)),
       onTap: () {
         showModalBottomSheet(
+          barrierLabel: 'sss',
           showDragHandle: true,
           context: context,
           builder: (context) {
@@ -33,7 +34,7 @@ class SettingsItem extends StatelessWidget {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 8.0),
                       child: IconButton(
                           onPressed: Navigator.of(context).pop,
                           icon: Icon(Icons.close)),
@@ -48,15 +49,14 @@ class SettingsItem extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     children: options.map((option) {
-                      return ListTile(
-                        leading: Icon(
-                          option == currentValue ? Icons.check : null,
-                        ),
+                      return RadioListTile(
+                        value: option,
+                        groupValue: currentValue,
                         title: Text(
                           dynamicToString(option),
                         ),
-                        onTap: () {
-                          onOptionChanged(option);
+                        onChanged: (onChangedOption) {
+                          onOptionChanged(onChangedOption);
                           Navigator.of(context).pop();
                         },
                       );
