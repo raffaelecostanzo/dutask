@@ -1,3 +1,4 @@
+import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
 import 'package:dutask/extensions/task_date_extensions.dart';
 import 'package:dutask/extensions/task_status_extensions.dart';
@@ -19,15 +20,17 @@ class FilterChipsBar extends ConsumerWidget {
     final selectedDateFilterValue = ref.watch(taskDateFilter);
 
     final List<FilterChip> filterChips = switch (selectedFilter) {
-      FilterType.status => TaskStatusFilter.values.map((filter) {
-          return FilterChip(
-            label: Text(filter.mapToText()),
-            selected: selectedStatusFilterValue == filter,
-            onSelected: (_) =>
-                ref.read(taskStatusFilter.notifier).state = filter,
-          );
-        }).toList(),
-      FilterType.dueDate => TaskDateFilter.values.map((filter) {
+      FilterType.status => [null, ...TaskStatus.values].map(
+          (filter) {
+            return FilterChip(
+              label: Text(filter.mapToText()),
+              selected: selectedStatusFilterValue == filter,
+              onSelected: (_) =>
+                  ref.read(taskStatusFilter.notifier).state = filter,
+            );
+          },
+        ).toList(),
+      FilterType.dueDate => [null, ...TaskDateFilter.values].map((filter) {
           return FilterChip(
             label: Text(filter.mapToText()),
             selected: selectedDateFilterValue == filter,

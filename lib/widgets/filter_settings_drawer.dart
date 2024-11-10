@@ -35,10 +35,8 @@ class FilterSettingsDrawer extends ConsumerWidget {
                     onChanged: (onChangedFilter) {
                       ref.read(selectedQuickFilter.notifier).state =
                           onChangedFilter!;
-                      ref.read(taskStatusFilter.notifier).state =
-                          TaskStatusFilter.all;
-                      ref.read(taskDateFilter.notifier).state =
-                          TaskDateFilter.all;
+                      ref.read(taskStatusFilter.notifier).state = null;
+                      ref.read(taskDateFilter.notifier).state = null;
                     },
                     title: Text(filter.mapToText()),
                   );
