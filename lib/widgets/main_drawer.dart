@@ -20,42 +20,44 @@ class MainDrawer extends ConsumerWidget {
             Container(
               padding: EdgeInsets.only(top: 20, left: 20),
               alignment: AlignmentDirectional.topStart,
-              child:
-                  Text('Dutask', style: Theme.of(context).textTheme.titleLarge),
+              child: Text(
+                'Dutask',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
             Divider(),
             Expanded(
               child: lists.isEmpty
                   ? Center(
-                      child: Text("There are no lists at the moment."),
+                      child: Text('There are no lists at the moment.'),
                     )
                   : ListView(
                       padding: EdgeInsets.zero,
-                      children: lists
-                          .map((list) => ListTile(
-                                leading: Icon(iconMap[list.icon]),
-                                title: Text(list.title),
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ListFormScreen(list: list),
-                                  ),
-                                ),
-                              ))
-                          .toList(),
+                      children: lists.map((list) {
+                        return ListTile(
+                          leading: Icon(iconMap[list.icon]),
+                          title: Text(list.title),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ListFormScreen(list: list),
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
             ),
             Divider(),
             ListTile(
               leading: Icon(Icons.settings),
               title: const Text('Settings'),
-              selected: false,
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
+                    builder: (_) => const SettingsScreen(),
                   ),
                 );
               },
@@ -63,18 +65,12 @@ class MainDrawer extends ConsumerWidget {
             ListTile(
               leading: Icon(Icons.help),
               title: const Text('Help and Feedback'),
-              selected: false,
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
             ),
             ListTile(
               leading: Icon(Icons.info),
               title: const Text('About'),
-              selected: false,
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
             )
           ],
         ),

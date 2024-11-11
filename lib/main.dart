@@ -8,13 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() {
   runApp(
     const ProviderScope(
-      child: MainApp(),
+      child: Main(),
     ),
   );
 }
 
-class MainApp extends ConsumerWidget {
-  const MainApp({super.key});
+class Main extends ConsumerWidget {
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

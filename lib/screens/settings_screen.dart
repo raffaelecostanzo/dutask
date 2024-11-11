@@ -15,12 +15,12 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         children: [
           SettingsItem(
-            currentValue: ref.watch(themeModeProvider),
+            selectedValue: ref.watch(themeModeProvider),
             title: 'Theme',
             icon: Icons.palette,
             options: ThemeMode.values,
-            onOptionChanged: (newValue) =>
-                ref.read(themeModeProvider.notifier).state = newValue,
+            onOptionChanged: (newThemeMode) =>
+                ref.read(themeModeProvider.notifier).state = newThemeMode,
           )
         ],
       ),

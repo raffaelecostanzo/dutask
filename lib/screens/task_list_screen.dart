@@ -15,8 +15,8 @@ class TaskListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(filteredTasks);
-    final currentQuickFilter = ref.watch(selectedQuickFilter);
+    final tasks = ref.watch(filteredTasksProvider);
+    final selectedQuickFilter = ref.watch(filterTypeProvider);
 
     return Scaffold(
       drawer: MainDrawer(),
@@ -47,7 +47,7 @@ class TaskListScreen extends ConsumerWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: FilterChipsBar(
-                          selectedFilter: currentQuickFilter,
+                          selectedFilter: selectedQuickFilter,
                         ),
                       ),
                     ),
@@ -66,7 +66,7 @@ class TaskListScreen extends ConsumerWidget {
                   )
                 : SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => TaskItem(tasks[index]),
+                      (_, index) => TaskItem(tasks[index]),
                       childCount: tasks.length,
                     ),
                   ),
@@ -80,18 +80,17 @@ class TaskListScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.small(
-            tooltip: 'List',
-            heroTag: 'list',
-            child: Icon(Icons.list),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ListFormScreen(),
-              ),
-            ),
-            backgroundColor:
-                Theme.of(context).colorScheme.surfaceContainerHighest,
-          ),
+              tooltip: 'List',
+              heroTag: 'list',
+              child: Icon(Icons.list),
+              onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ListFormScreen(),
+                    ),
+                  ),
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest),
           SizedBox(height: 16),
           FloatingActionButton(
             tooltip: 'Task',
@@ -100,7 +99,7 @@ class TaskListScreen extends ConsumerWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const TaskFormScreen(),
+                builder: (_) => const TaskFormScreen(),
               ),
             ),
           ),

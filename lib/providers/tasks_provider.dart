@@ -1,9 +1,9 @@
 import 'package:dutask/data/default_tasks.dart';
 import 'package:dutask/models/task_model.dart';
-import 'package:dutask/extensions/task_status_extensions.dart';
+import 'package:dutask/extensions/task_status_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TasksNotifier extends Notifier<List<TaskModel>> {
+class TasksProvider extends Notifier<List<TaskModel>> {
   List<TaskModel> _fetchTasks() {
     return defaultTasks;
   }
@@ -20,7 +20,7 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
     state = [...state, task];
   }
 
-  void toggleStatusTask(String taskId) {
+  void toggleTaskStatus(String taskId) {
     previousState = [...state];
     final localPreviousState = [...state];
     final taskToReplaceIndex = state.indexWhere((task) => task.id == taskId);
@@ -49,6 +49,6 @@ class TasksNotifier extends Notifier<List<TaskModel>> {
   }
 }
 
-final tasksProvider = NotifierProvider<TasksNotifier, List<TaskModel>>(
-  TasksNotifier.new,
+final tasksProvider = NotifierProvider<TasksProvider, List<TaskModel>>(
+  TasksProvider.new,
 );

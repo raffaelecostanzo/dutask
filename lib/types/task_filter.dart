@@ -1,0 +1,1 @@
+enum TaskFilter { status, dueDate }

@@ -1,8 +1,8 @@
 import 'package:dutask/models/task_model.dart';
-import 'package:dutask/providers/filtered_tasks_provider.dart';
+import 'package:dutask/types/task_status_filter.dart';
 import 'package:flutter/material.dart';
 
-extension TaskStatusMapping on TaskStatus {
+extension TaskStatusExtension on TaskStatus {
   bool? mapToTristate() {
     return switch (this) {
       TaskStatus.active => false,
@@ -37,27 +37,6 @@ extension TaskStatusMapping on TaskStatus {
       TaskStatus.active => TaskStatus.started,
       TaskStatus.started => TaskStatus.completed,
       TaskStatus.completed => TaskStatus.active,
-    };
-  }
-}
-
-extension TaskStatusBoolToggling on bool? {
-  bool? toggle() {
-    return switch (this) {
-      false => null,
-      null => true,
-      true => false,
-    };
-  }
-}
-
-extension TaskStatusFilterMapping on TaskStatusFilter {
-  String mapToText() {
-    return switch (this) {
-      TaskStatusFilter.all => 'All',
-      TaskStatusFilter.active => 'Active',
-      TaskStatusFilter.started => 'Started',
-      TaskStatusFilter.completed => 'Completed',
     };
   }
 }

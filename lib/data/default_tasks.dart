@@ -63,7 +63,7 @@ final defaultTasks = [
     title: 'Go to the gym',
     description: null,
     dueDate: DateTime.now(),
-    listId: null,
+    listId: defaultLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),

@@ -1,4 +1,4 @@
-import 'package:dutask/utils/constants.dart';
+import 'package:dutask/types/task_filter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final selectedQuickFilter = StateProvider((ref) => FilterType.status);
+final filterTypeProvider = StateProvider((ref) => TaskFilter.status);

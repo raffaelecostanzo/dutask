@@ -1,15 +1,15 @@
+import 'package:dutask/extensions/string_extension.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/providers/tasks_provider.dart';
 import 'package:dutask/utils/constants.dart';
-import 'package:dutask/extensions/common_extensions.dart';
-import 'package:dutask/extensions/task_status_extensions.dart';
+import 'package:dutask/extensions/build_context_extension.dart';
+import 'package:dutask/extensions/task_status_extension.dart';
 import 'package:dutask/utils/form_validator.dart';
 import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
 import '../data/list_icons.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
@@ -26,23 +26,24 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
 
   String _screenTitle = 'New task';
   String _title = '';
-  String _description = '';
   TaskStatus _status = TaskStatus.active;
-  String? _listId = '';
-
+  String? _listId;
+  String? _description;
   final _dateTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
     if (widget.task != null) {
-      _screenTitle = widget.task!.title;
-      _title = widget.task!.title;
-      _description = widget.task!.description ?? '';
-      _status = widget.task!.status;
-      _listId = widget.task!.listId;
-      if (widget.task!.dueDate != null) {
-        _dateTextController.text = dateFormat.format(widget.task!.dueDate!);
+      final widgetTask = widget.task!;
+      _screenTitle = widgetTask.title;
+      _title = widgetTask.title;
+      _status = widgetTask.status;
+      _listId = widgetTask.listId;
+      _description = widgetTask.description;
+      if (widgetTask.dueDate != null) {
+        _dateTextController.text = dateFormat.format(widgetTask.dueDate!);
       }
     }
   }
@@ -51,192 +52,6 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   void dispose() {
     _dateTextController.dispose();
     super.dispose();
-  }
-
-  void _showDatePicker() async {
-    final DateTime now = DateTime.now();
-    final DateTime firstDate = DateTime(1970, 1, 1);
-    final DateTime lastDate = DateTime(now.year + 10, 12, 31);
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: firstDate,
-      lastDate: lastDate,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _dateTextController.text = dateFormat.format(pickedDate);
-      });
-    }
-  }
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      String snackBarMessage;
-      final taskNotifier = ref.read(tasksProvider.notifier);
-
-      if (widget.task != null) {
-        taskNotifier.updateTask(
-          widget.task!.id,
-          widget.task!.copyWith(
-            title: _title,
-            description: _description,
-            dueDate: _dateTextController.text.getDateOrNull(),
-            status: _status,
-            listId: _listId,
-          ),
-        );
-        snackBarMessage = 'Task updated successfully';
-      } else {
-        taskNotifier.createTask(
-          TaskModel(
-            id: uuid.v4(),
-            title: _title,
-            description: _description,
-            dueDate: _dateTextController.text.getDateOrNull(),
-            status: _status,
-            listId: _listId,
-          ),
-        );
-        snackBarMessage = 'Task created successfully';
-      }
-      Navigator.of(context).pop();
-      context.showSnackBarWithUndo(taskNotifier.undo, snackBarMessage);
-    }
-  }
-
-  Widget _buildTitleField() {
-    return TextFormField(
-      validator: (value) => FormValidator.title(value),
-      initialValue: _title,
-      maxLength: 63,
-      autofocus: widget.task == null,
-      decoration: const InputDecoration(
-        label: Text('Title'),
-        border: OutlineInputBorder(),
-      ),
-      onSaved: (value) {
-        _title = value!;
-      },
-    );
-  }
-
-  Widget _buildDueDateField() {
-    return TextFormField(
-      validator: (value) => FormValidator.dueDate(value),
-      controller: _dateTextController,
-      maxLength: 10,
-      decoration: InputDecoration(
-        label: Text('Due date'),
-        hintText: dateFieldHintText,
-        counterText: '',
-        border: OutlineInputBorder(),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: IconButton(
-            icon: Icon(Icons.edit_calendar),
-            onPressed: _showDatePicker,
-          ),
-        ),
-      ),
-      keyboardType: TextInputType.datetime,
-      inputFormatters: [MaskTextInputFormatter(mask: '##/##/####')],
-    );
-  }
-
-  Widget _buildStatusField() {
-    return DropdownMenuFormField<TaskStatus>(
-      requestFocusOnTap: false,
-      width: MediaQuery.of(context).size.width - 32,
-      initialValue: _status,
-      leadingIcon: Icon(_status.mapToIcon()),
-      label: Text('Status'),
-      onSaved: (TaskStatus? value) {
-        if (value != null) {
-          _status = value;
-        }
-      },
-      onChanged: (TaskStatus? value) {
-        if (value != null) {
-          setState(() {
-            _status = value;
-          });
-        }
-      },
-      dropdownMenuEntries: TaskStatus.values.map((status) {
-        return DropdownMenuEntry(
-          value: status,
-          label: status.mapToText(),
-          leadingIcon: Icon(status.mapToIcon()),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildListField() {
-    final lists = ref.read(listsProvider);
-    final selectedList = lists.firstWhere(
-      (list) => list.id == _listId,
-      orElse: () => lists.first,
-    );
-
-    return DropdownMenuFormField<String?>(
-      requestFocusOnTap: true,
-      width: MediaQuery.of(context).size.width - 32,
-      initialValue: _listId,
-      leadingIcon: Icon(
-          _listId != '' ? iconMap[selectedList.icon] : Icons.question_mark),
-      label: Text('List'),
-      onSaved: (String? value) {
-        if (value != null) {
-          _listId = value;
-        }
-      },
-      validator: (String? value) => FormValidator.list(
-        value,
-        lists.map((e) => e.id).toList(),
-      ),
-      onChanged: (String? value) {
-        if (value != null) {
-          setState(() {
-            _listId = value;
-          });
-        }
-      },
-      dropdownMenuEntries: lists.map((list) {
-        return DropdownMenuEntry(
-          value: list.id,
-          label: list.title,
-          leadingIcon: Icon(iconMap[list.icon]),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildDescriptionField() {
-    return TextFormField(
-      initialValue: _description,
-      decoration: const InputDecoration(
-        label: Text('Description'),
-        border: OutlineInputBorder(),
-      ),
-      minLines: 5,
-      maxLines: 10,
-      onSaved: (value) {
-        _description = value ?? '';
-      },
-    );
-  }
-
-  void _delete() {
-    final taskNotifier = ref.read(tasksProvider.notifier);
-    taskNotifier.deleteTask(widget.task!.id);
-    Navigator.of(context).pop();
-    context.showSnackBarWithUndo(
-        taskNotifier.undo, 'Task deleted successfully');
   }
 
   @override
@@ -275,5 +90,185 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
         onPressed: _submit,
       ),
     );
+  }
+
+  Widget _buildTitleField() {
+    return TextFormField(
+      validator: (onFormTitle) => FormValidator.title(onFormTitle),
+      initialValue: _title,
+      maxLength: 63,
+      autofocus: widget.task == null,
+      decoration: const InputDecoration(
+        label: Text('Title'),
+        border: OutlineInputBorder(),
+      ),
+      onSaved: (onTitleSaved) => _title = onTitleSaved!,
+    );
+  }
+
+  Widget _buildDueDateField() {
+    return TextFormField(
+      validator: (onDueDateValidated) =>
+          FormValidator.dueDate(onDueDateValidated),
+      controller: _dateTextController,
+      maxLength: 10,
+      decoration: InputDecoration(
+        label: Text('Due date'),
+        hintText: dateFieldHintText,
+        counterText: '',
+        border: OutlineInputBorder(),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: IconButton(
+            icon: Icon(Icons.edit_calendar),
+            onPressed: _showDatePicker,
+          ),
+        ),
+      ),
+      keyboardType: TextInputType.datetime,
+      inputFormatters: [MaskTextInputFormatter(mask: '##/##/####')],
+    );
+  }
+
+  Widget _buildStatusField() {
+    return DropdownMenuFormField<TaskStatus>(
+      requestFocusOnTap: false,
+      width: MediaQuery.of(context).size.width - 32,
+      initialValue: _status,
+      leadingIcon: Icon(_status.mapToIcon()),
+      label: Text('Status'),
+      onSaved: (onStatusSaved) {
+        if (onStatusSaved != null) {
+          _status = onStatusSaved;
+        }
+      },
+      onChanged: (onStatusChanged) {
+        if (onStatusChanged != null) {
+          setState(() => _status = onStatusChanged);
+        }
+      },
+      dropdownMenuEntries: TaskStatus.values.map((status) {
+        return DropdownMenuEntry(
+          value: status,
+          label: status.mapToText(),
+          leadingIcon: Icon(status.mapToIcon()),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildListField() {
+    final lists = ref.read(listsProvider);
+    final selectedList = lists.firstWhere(
+      (list) => list.id == _listId,
+      orElse: () => lists.first,
+    );
+
+    return DropdownMenuFormField<String?>(
+      requestFocusOnTap: true,
+      width: MediaQuery.of(context).size.width - 32,
+      initialValue: _listId,
+      leadingIcon: Icon(
+        _listId != null ? iconMap[selectedList.icon] : Icons.question_mark,
+      ),
+      label: Text('List'),
+      onSaved: (onSavedList) {
+        if (onSavedList != null) {
+          _listId = onSavedList;
+        }
+      },
+      validator: (onListValidated) => FormValidator.list(
+        onListValidated,
+        lists.map((list) => list.id).toList(),
+      ),
+      onChanged: (onListChanged) {
+        if (onListChanged != null) {
+          setState(() => _listId = onListChanged);
+        }
+      },
+      dropdownMenuEntries: lists.map((list) {
+        return DropdownMenuEntry(
+          value: list.id,
+          label: list.title,
+          leadingIcon: Icon(iconMap[list.icon]),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDescriptionField() {
+    return TextFormField(
+      initialValue: _description,
+      decoration: const InputDecoration(
+        label: Text('Description'),
+        border: OutlineInputBorder(),
+      ),
+      minLines: 5,
+      maxLines: 10,
+      onSaved: (onDescriptionSaved) {
+        _description = onDescriptionSaved ?? '';
+      },
+    );
+  }
+
+  void _delete() {
+    final tasksNotifier = ref.read(tasksProvider.notifier);
+    tasksNotifier.deleteTask(widget.task!.id);
+    Navigator.of(context).pop();
+    const snackBarMessage = 'Task deleted successfully';
+    context.showSnackBarWithUndo(tasksNotifier.undo, snackBarMessage);
+  }
+
+  void _showDatePicker() async {
+    final DateTime now = DateTime.now();
+    final DateTime firstDate = DateTime(1970, 1, 1);
+    final DateTime lastDate = DateTime(now.year + 10, 12, 31);
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    );
+    if (pickedDate != null) {
+      setState(() => _dateTextController.text = dateFormat.format(pickedDate));
+    }
+  }
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      String snackBarMessage;
+      final tasksNotifier = ref.read(tasksProvider.notifier);
+
+      if (widget.task != null) {
+        tasksNotifier.updateTask(
+          widget.task!.id,
+          widget.task!.copyWith(
+            title: _title,
+            dueDate: _dateTextController.text.getDateOrNull(),
+            status: _status,
+            listId: _listId,
+            description: _description,
+          ),
+        );
+        snackBarMessage = 'Task updated successfully';
+      } else {
+        tasksNotifier.createTask(
+          TaskModel(
+            id: uuid.v4(),
+            title: _title,
+            dueDate: _dateTextController.text.getDateOrNull(),
+            status: _status,
+            listId: _listId,
+            description: _description,
+          ),
+        );
+        snackBarMessage = 'Task created successfully';
+      }
+      Navigator.of(context).pop();
+      context.showSnackBarWithUndo(tasksNotifier.undo, snackBarMessage);
+    }
   }
 }

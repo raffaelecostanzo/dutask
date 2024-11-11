@@ -2,7 +2,7 @@ import 'package:dutask/data/default_lists.dart';
 import 'package:dutask/models/list_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ListsNotifier extends Notifier<List<ListModel>> {
+class ListsProvider extends Notifier<List<ListModel>> {
   List<ListModel> _fetchLists() {
     return defaultLists;
   }
@@ -39,6 +39,6 @@ class ListsNotifier extends Notifier<List<ListModel>> {
   }
 }
 
-final listsProvider = NotifierProvider<ListsNotifier, List<ListModel>>(
-  ListsNotifier.new,
+final listsProvider = NotifierProvider<ListsProvider, List<ListModel>>(
+  ListsProvider.new,
 );

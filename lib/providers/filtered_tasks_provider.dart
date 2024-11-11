@@ -1,19 +1,17 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
-import 'package:dutask/extensions/task_date_extensions.dart';
-import 'package:dutask/extensions/task_status_extensions.dart';
+import 'package:dutask/extensions/date_time_extension.dart';
+import 'package:dutask/extensions/task_status_extension.dart';
+import 'package:dutask/types/task_date_filter.dart';
+import 'package:dutask/types/task_status_filter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum TaskStatusFilter { all, started, active, completed }
+final taskStatusFilterProvider = StateProvider((ref) => TaskStatusFilter.all);
+final taskDateFilterProvider = StateProvider((ref) => TaskDateFilter.all);
 
-enum TaskDateFilter { all, yesterday, today, tomorrow }
-
-final taskStatusFilter = StateProvider((ref) => TaskStatusFilter.all);
-final taskDateFilter = StateProvider((ref) => TaskDateFilter.all);
-
-final filteredTasks = Provider<List<TaskModel>>((ref) {
-  final statusFilter = ref.watch(taskStatusFilter);
-  final dateFilter = ref.watch(taskDateFilter);
+final filteredTasksProvider = Provider<List<TaskModel>>((ref) {
+  final statusFilter = ref.watch(taskStatusFilterProvider);
+  final dateFilter = ref.watch(taskDateFilterProvider);
   final tasks = ref.watch(tasksProvider);
 
   return tasks
