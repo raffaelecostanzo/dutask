@@ -1,5 +1,6 @@
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/tasks_provider.dart';
+import 'package:dutask/types/operation.dart';
 import 'package:dutask/utils/constants.dart';
 import 'package:dutask/extensions/build_context_extension.dart';
 import 'package:dutask/screens/task_form_screen.dart';
@@ -56,5 +57,3 @@ class TaskItemMenuButton extends ConsumerWidget {
     );
   }
 }
-
-enum Operation { create, read, update, delete, duplicate }
