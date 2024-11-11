@@ -4,11 +4,10 @@ import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/extensions/build_context_extension.dart';
 import 'package:dutask/utils/form_validator.dart';
 import 'package:dutask/utils/functions.dart';
+import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-
-import '../widgets/dropdown_menu_formfield.dart';
 
 class ListFormScreen extends ConsumerStatefulWidget {
   const ListFormScreen({super.key, this.list});

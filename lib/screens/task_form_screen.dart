@@ -1,3 +1,4 @@
+import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/extensions/string_extension.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
@@ -10,7 +11,6 @@ import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import '../data/list_icons.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
   const TaskFormScreen({super.key, this.task});
