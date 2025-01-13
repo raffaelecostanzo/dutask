@@ -2,12 +2,12 @@ import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/models/list_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/extensions/build_context_extension.dart';
+import 'package:dutask/utils/constants.dart';
 import 'package:dutask/utils/form_validator.dart';
 import 'package:dutask/utils/functions.dart';
 import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 class ListFormScreen extends ConsumerStatefulWidget {
   const ListFormScreen({super.key, this.list});
@@ -20,21 +20,21 @@ class ListFormScreen extends ConsumerStatefulWidget {
 
 class _ListFormViewState extends ConsumerState<ListFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final Uuid uuid = Uuid();
 
   String _screenTitle = "New list";
   String _title = '';
-  String _description = '';
+  String? _description;
   String _icon = '';
 
   @override
   void initState() {
     super.initState();
     if (widget.list != null) {
-      _screenTitle = widget.list!.title;
-      _title = widget.list!.title;
-      _description = widget.list!.description ?? '';
-      _icon = widget.list!.icon;
+      final widgetList = widget.list!;
+      _screenTitle = widgetList.title;
+      _title = widgetList.title;
+      _description = widgetList.description;
+      _icon = widgetList.icon;
     }
   }
 
@@ -43,12 +43,13 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
       _formKey.currentState!.save();
 
       String snackBarMessage;
-      final listNotifier = ref.read(listsProvider.notifier);
+      final listsNotifier = ref.read(listsProvider.notifier);
 
       if (widget.list != null) {
-        listNotifier.updateList(
-          widget.list!.id,
-          widget.list!.copyWith(
+        final widgetList = widget.list!;
+        listsNotifier.updateList(
+          widgetList.id,
+          widgetList.copyWith(
             title: _title,
             icon: _icon,
             description: _description,
@@ -56,7 +57,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
         );
         snackBarMessage = 'List updated successfully';
       } else {
-        listNotifier.createList(
+        listsNotifier.createList(
           ListModel(
             id: uuid.v4(),
             title: _title,
@@ -67,16 +68,16 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
         snackBarMessage = 'List created successfully';
       }
       Navigator.of(context).pop();
-      context.showSnackBarWithUndo(listNotifier.undo, snackBarMessage);
+      context.showSnackBarWithUndo(listsNotifier.undo, snackBarMessage);
     }
   }
 
   void _delete() {
-    final listNotifier = ref.read(listsProvider.notifier);
-    listNotifier.deleteList(widget.list!.id);
+    final listsNotifier = ref.read(listsProvider.notifier);
+    listsNotifier.deleteList(widget.list!.id);
     Navigator.of(context).pop();
     context.showSnackBarWithUndo(
-        listNotifier.undo, 'List deleted successfully');
+        listsNotifier.undo, 'List deleted successfully');
   }
 
   Widget _buildIconDropdown() {
@@ -84,7 +85,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
       requestFocusOnTap: true,
       width: MediaQuery.of(context).size.width - 32,
       initialValue: _icon,
-      leadingIcon: Icon(_icon != '' ? iconMap[_icon] : Icons.question_mark),
+      leadingIcon: Icon(_icon != '' ? listIcons[_icon] : Icons.question_mark),
       label: Text('Icon'),
       onSaved: (String? value) {
         if (value != null) {
@@ -93,7 +94,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
       },
       validator: (String? value) => FormValidator.icon(
         value,
-        iconMap.keys.toList(),
+        listIcons.keys.toList(),
       ),
       onChanged: (String? value) {
         if (value != null) {
@@ -102,11 +103,11 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
           });
         }
       },
-      dropdownMenuEntries: iconMap.keys.map((icon) {
+      dropdownMenuEntries: listIcons.keys.map((icon) {
         return DropdownMenuEntry(
           value: icon,
           label: getIconName(icon),
-          leadingIcon: Icon(iconMap[icon]),
+          leadingIcon: Icon(listIcons[icon]),
         );
       }).toList(),
     );
@@ -151,9 +152,8 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
                 ),
                 minLines: 5,
                 maxLines: 10,
-                onSaved: (value) {
-                  _description = value ?? '';
-                },
+                onSaved: (onDescriptionSaved) =>
+                    _description = onDescriptionSaved,
               ),
             ],
           ),

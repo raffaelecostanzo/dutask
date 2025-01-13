@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dutask/utils/constants.dart';
 
 class FormValidator {
@@ -11,8 +12,12 @@ class FormValidator {
     return null;
   }
 
-  static String? list(String? listName, List<String> list) {
-    if (!list.contains(listName)) return 'Enter a valid list name';
+  static String? list(String? listId, List<String> idList) {
+    if (listId == '__no_list__') return null;
+    final foundList = idList.firstWhereOrNull(
+      (list) => list == listId,
+    );
+    if (foundList == null) return 'Enter a valid list name';
     return null;
   }
 

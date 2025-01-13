@@ -1,13 +1,13 @@
-import 'package:dutask/data/default_lists.dart';
+import 'package:dutask/data/initial_lists.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/utils/constants.dart';
 
-final defaultTasks = [
+final initialTasks = [
   TaskModel(
     title: 'Brush your teeth',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -15,7 +15,7 @@ final defaultTasks = [
     title: 'Eat well',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -23,7 +23,7 @@ final defaultTasks = [
     title: 'Be absurd',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -31,7 +31,7 @@ final defaultTasks = [
     title: 'Smile',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -39,7 +39,7 @@ final defaultTasks = [
     title: 'Walk 10k steps',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -47,7 +47,7 @@ final defaultTasks = [
     title: 'Sleep well',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -55,7 +55,7 @@ final defaultTasks = [
     title: 'Wash your hands',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -63,7 +63,7 @@ final defaultTasks = [
     title: 'Go to the gym',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   ),
@@ -71,7 +71,7 @@ final defaultTasks = [
     title: 'Tell your family you love them',
     description: null,
     dueDate: DateTime.now(),
-    listId: defaultLists.first.id,
+    listId: initialLists.first.id,
     status: TaskStatus.active,
     id: uuid.v4(),
   )

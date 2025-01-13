@@ -17,6 +17,7 @@ class DropdownMenuFormField<T> extends FormField<T> {
     super.initialValue,
     super.onSaved,
     super.validator,
+    super.enabled,
     ValueChanged<T?>? onChanged,
     AutovalidateMode super.autovalidateMode = AutovalidateMode.disabled,
   }) : super(

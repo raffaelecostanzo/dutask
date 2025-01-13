@@ -1,7 +1,7 @@
 import 'package:dutask/models/list_model.dart';
 import 'package:dutask/utils/constants.dart';
 
-final defaultLists = [
+final initialLists = [
   ListModel(
     title: 'My Day',
     description: 'Day to day lists.',

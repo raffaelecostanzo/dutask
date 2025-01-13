@@ -1,10 +1,10 @@
-import 'package:dutask/data/default_lists.dart';
+import 'package:dutask/data/initial_lists.dart';
 import 'package:dutask/models/list_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ListsProvider extends Notifier<List<ListModel>> {
   List<ListModel> _fetchLists() {
-    return defaultLists;
+    return initialLists;
   }
 
   @override

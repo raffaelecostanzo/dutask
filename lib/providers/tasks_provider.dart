@@ -1,11 +1,11 @@
-import 'package:dutask/data/default_tasks.dart';
+import 'package:dutask/data/initial_tasks.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/extensions/task_status_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksProvider extends Notifier<List<TaskModel>> {
   List<TaskModel> _fetchTasks() {
-    return defaultTasks;
+    return initialTasks;
   }
 
   @override

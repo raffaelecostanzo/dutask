@@ -1,8 +1,8 @@
-import 'package:dutask/data/quick_filters.dart';
 import 'package:dutask/extensions/filter_type_extension.dart';
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/providers/quick_filter_provider.dart';
+import 'package:dutask/providers/task_filter_provider.dart';
 import 'package:dutask/types/task_date_filter.dart';
+import 'package:dutask/types/task_filter.dart';
 import 'package:dutask/types/task_status_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,7 @@ class FilterSettingsDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedQuickFilter = ref.watch(filterTypeProvider);
+    final selectedFilter = ref.watch(taskFilterProvider);
     return SafeArea(
       child: Drawer(
         child: Column(
@@ -23,7 +23,7 @@ class FilterSettingsDrawer extends ConsumerWidget {
               padding: EdgeInsets.only(top: 20, left: 20),
               alignment: AlignmentDirectional.topStart,
               child: Text(
-                'Quick filter settings',
+                'Filter settings',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -31,12 +31,12 @@ class FilterSettingsDrawer extends ConsumerWidget {
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
-                children: quickTaskFilters.map((filter) {
+                children: taskFilters.map((filter) {
                   return RadioListTile(
                     value: filter,
-                    groupValue: selectedQuickFilter,
+                    groupValue: selectedFilter,
                     onChanged: (onChangedFilter) {
-                      ref.read(filterTypeProvider.notifier).state =
+                      ref.read(taskFilterProvider.notifier).state =
                           onChangedFilter!;
                       ref.read(taskStatusFilterProvider.notifier).state =
                           TaskStatusFilter.all;

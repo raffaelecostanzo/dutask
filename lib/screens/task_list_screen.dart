@@ -1,5 +1,5 @@
 import 'package:dutask/providers/filtered_tasks_provider.dart';
-import 'package:dutask/providers/quick_filter_provider.dart';
+import 'package:dutask/providers/task_filter_provider.dart';
 import 'package:dutask/screens/task_form_screen.dart';
 import 'package:dutask/widgets/filter_chips_bar.dart';
 import 'package:dutask/widgets/filter_settings_drawer.dart';
@@ -16,7 +16,7 @@ class TaskListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(filteredTasksProvider);
-    final selectedQuickFilter = ref.watch(filterTypeProvider);
+    final selectedFilter = ref.watch(taskFilterProvider);
 
     return Scaffold(
       drawer: MainDrawer(),
@@ -47,7 +47,7 @@ class TaskListScreen extends ConsumerWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: FilterChipsBar(
-                          selectedFilter: selectedQuickFilter,
+                          selectedFilter: selectedFilter,
                         ),
                       ),
                     ),

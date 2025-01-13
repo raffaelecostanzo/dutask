@@ -35,7 +35,7 @@ class MainDrawer extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       children: lists.map((list) {
                         return ListTile(
-                          leading: Icon(iconMap[list.icon]),
+                          leading: Icon(listIcons[list.icon]),
                           title: Text(list.title),
                           onTap: () {
                             Navigator.push(

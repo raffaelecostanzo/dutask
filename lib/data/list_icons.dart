@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final Map<String, IconData> iconMap = {
+final Map<String, IconData> listIcons = {
   'home': Icons.home,
   'search': Icons.search,
   'settings': Icons.settings,

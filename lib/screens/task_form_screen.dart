@@ -1,8 +1,10 @@
 import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/extensions/string_extension.dart';
+import 'package:dutask/models/list_model.dart';
 import 'package:dutask/models/task_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/providers/tasks_provider.dart';
+import 'package:dutask/screens/list_form_screen.dart';
 import 'package:dutask/utils/constants.dart';
 import 'package:dutask/extensions/build_context_extension.dart';
 import 'package:dutask/extensions/task_status_extension.dart';
@@ -10,6 +12,7 @@ import 'package:dutask/utils/form_validator.dart';
 import 'package:dutask/widgets/dropdown_menu_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
@@ -158,41 +161,55 @@ class _TaskFormViewState extends ConsumerState<TaskFormScreen> {
   }
 
   Widget _buildListField() {
-    final lists = ref.read(listsProvider);
-    final selectedList = lists.firstWhere(
+    final lists = ref.watch(listsProvider);
+    final isListEmpty = lists.isEmpty;
+    final ListModel? taskList = lists.firstWhereOrNull(
       (list) => list.id == _listId,
-      orElse: () => lists.first,
     );
 
     return DropdownMenuFormField<String?>(
       requestFocusOnTap: true,
       width: MediaQuery.of(context).size.width - 32,
-      initialValue: _listId,
+      initialValue: isListEmpty || taskList == null ? '__no_list__' : _listId,
       leadingIcon: Icon(
-        _listId != null ? iconMap[selectedList.icon] : Icons.question_mark,
+        _listId == '__no_list__'
+            ? Icons.close
+            : taskList == null
+                ? Icons.question_mark
+                : listIcons[taskList.icon],
       ),
       label: Text('List'),
-      onSaved: (onSavedList) {
-        if (onSavedList != null) {
-          _listId = onSavedList;
-        }
-      },
-      validator: (onListValidated) => FormValidator.list(
-        onListValidated,
+      onSaved: (onSavedList) => _listId = onSavedList,
+      validator: (onListIdValidated) => FormValidator.list(
+        onListIdValidated,
         lists.map((list) => list.id).toList(),
       ),
-      onChanged: (onListChanged) {
-        if (onListChanged != null) {
-          setState(() => _listId = onListChanged);
-        }
-      },
-      dropdownMenuEntries: lists.map((list) {
-        return DropdownMenuEntry(
-          value: list.id,
-          label: list.title,
-          leadingIcon: Icon(iconMap[list.icon]),
-        );
-      }).toList(),
+      onChanged: (onListChanged) => setState(() => _listId = onListChanged),
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+          value: '__no_list__',
+          label: 'No list',
+          leadingIcon: Icon(Icons.close),
+          trailingIcon: isListEmpty
+              ? IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ListFormScreen(),
+                    ),
+                  ),
+                  icon: Icon(Icons.add),
+                )
+              : null,
+        ),
+        ...lists.map((list) {
+          return DropdownMenuEntry(
+            value: list.id,
+            label: list.title,
+            leadingIcon: Icon(listIcons[list.icon]),
+          );
+        })
+      ],
     );
   }
 
