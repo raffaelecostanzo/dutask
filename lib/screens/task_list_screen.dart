@@ -7,8 +7,12 @@ import 'package:dutask/widgets/main_drawer.dart';
 import 'package:dutask/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'list_form_screen.dart';
+
+const kSliverPersistentHeaderTopPadding = 8.0;
+const kSliverToBoxAdapterHeight = 128.0;
+const kFabSizedBoxHeight = 16.0;
+const kSliverFilterChipsBarDelegateMinMaxExtent = 72.0;
 
 class TaskListScreen extends ConsumerWidget {
   const TaskListScreen({super.key});
@@ -43,7 +47,8 @@ class TaskListScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 8.0),
+                      padding: EdgeInsets.only(
+                          top: kSliverPersistentHeaderTopPadding),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: FilterChipsBar(
@@ -71,7 +76,7 @@ class TaskListScreen extends ConsumerWidget {
                     ),
                   ),
             SliverToBoxAdapter(
-              child: SizedBox(height: 128), // Spazio vuoto di 128px
+              child: SizedBox(height: kSliverToBoxAdapterHeight),
             ),
           ],
         ),
@@ -91,7 +96,7 @@ class TaskListScreen extends ConsumerWidget {
                   ),
               backgroundColor:
                   Theme.of(context).colorScheme.surfaceContainerHighest),
-          SizedBox(height: 16),
+          SizedBox(height: kFabSizedBoxHeight),
           FloatingActionButton(
             tooltip: 'Task',
             heroTag: 'task',
@@ -112,12 +117,12 @@ class TaskListScreen extends ConsumerWidget {
 class _SliverFilterChipsBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
-  _SliverFilterChipsBarDelegate({required this.child});
+  @override
+  double get minExtent => kSliverFilterChipsBarDelegateMinMaxExtent;
+  @override
+  double get maxExtent => kSliverFilterChipsBarDelegateMinMaxExtent;
 
-  @override
-  double get minExtent => 72.0;
-  @override
-  double get maxExtent => 72.0;
+  _SliverFilterChipsBarDelegate({required this.child});
 
   @override
   Widget build(

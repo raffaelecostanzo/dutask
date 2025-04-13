@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SystemUiThemer extends StatelessWidget {
-  final Widget child;
-
   const SystemUiThemer({super.key, required this.child});
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

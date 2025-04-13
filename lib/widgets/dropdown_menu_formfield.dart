@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
-class DropdownMenuFormField<T> extends FormField<T> {
-  final List<DropdownMenuEntry<T>> dropdownMenuEntries;
-  final Widget? leadingIcon;
-  final Widget? label;
-  final double? width;
-  final bool requestFocusOnTap;
+const kDropdownMenuFieldHeight = 300.0;
 
+class DropdownMenuFormField<T> extends FormField<T> {
   DropdownMenuFormField({
     super.key,
     required this.dropdownMenuEntries,
@@ -36,8 +32,14 @@ class DropdownMenuFormField<T> extends FormField<T> {
                   onChanged(value);
                 }
               },
-              menuHeight: 300,
+              menuHeight: kDropdownMenuFieldHeight,
             );
           },
         );
+
+  final List<DropdownMenuEntry<T>> dropdownMenuEntries;
+  final Widget? leadingIcon;
+  final Widget? label;
+  final double? width;
+  final bool requestFocusOnTap;
 }

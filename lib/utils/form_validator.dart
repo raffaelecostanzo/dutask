@@ -24,7 +24,7 @@ class FormValidator {
   static String? dueDate(String? dueDate) {
     if (dueDate == null || dueDate.isEmpty) return null;
     try {
-      final parsedDate = dateFormat.parse(dueDate);
+      final parsedDate = kDateFormat.parse(dueDate);
       if (parsedDate.isBefore(DateTime(1970, 1, 1)) ||
           parsedDate.isAfter(DateTime(DateTime.now().year + 10, 12, 31))) {
         return 'Invalid date';
