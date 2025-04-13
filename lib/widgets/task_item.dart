@@ -12,6 +12,13 @@ class TaskItem extends ConsumerWidget {
 
   final TaskModel task;
 
+  String _returnSubtitle() {
+    final dueDate = task.dueDate;
+    if (dueDate == null) return '';
+
+    return kDateFormat.format(dueDate);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
@@ -31,8 +38,7 @@ class TaskItem extends ConsumerWidget {
               : null,
         ),
       ),
-      subtitle:
-          task.dueDate != null ? Text(dateFormat.format(task.dueDate!)) : null,
+      subtitle: Text(_returnSubtitle()),
       trailing: TaskItemMenuButton(task),
       onTap: () => Navigator.push(
         context,

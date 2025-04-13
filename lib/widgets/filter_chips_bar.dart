@@ -7,13 +7,15 @@ import 'package:dutask/types/task_status_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FilterChipsBar extends ConsumerWidget {
-  final TaskFilter selectedFilter;
+const kSingleChildScrollViewSpacing = 8.0;
 
+class FilterChipsBar extends ConsumerWidget {
   const FilterChipsBar({
     required this.selectedFilter,
     super.key,
   });
+
+  final TaskFilter selectedFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,7 +46,7 @@ class FilterChipsBar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Wrap(
-          spacing: 8.0,
+          spacing: kSingleChildScrollViewSpacing,
           children: filterChips,
         ),
       ),

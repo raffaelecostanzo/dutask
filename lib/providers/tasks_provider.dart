@@ -4,16 +4,12 @@ import 'package:dutask/extensions/task_status_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksProvider extends Notifier<List<TaskModel>> {
-  List<TaskModel> _fetchTasks() {
-    return initialTasks;
-  }
+  List<TaskModel> previousState = const [];
 
   @override
   List<TaskModel> build() {
     return _fetchTasks();
   }
-
-  late List<TaskModel> previousState;
 
   void createTask(TaskModel task) {
     previousState = [...state];
@@ -46,6 +42,10 @@ class TasksProvider extends Notifier<List<TaskModel>> {
     final localPreviousState = [...state];
     state = [...previousState];
     previousState = [...localPreviousState];
+  }
+
+  List<TaskModel> _fetchTasks() {
+    return initialTasks;
   }
 }
 

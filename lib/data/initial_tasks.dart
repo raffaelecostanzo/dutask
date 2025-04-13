@@ -9,7 +9,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Eat well',
@@ -17,7 +17,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Be absurd',
@@ -25,7 +25,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Smile',
@@ -33,7 +33,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Walk 10k steps',
@@ -41,7 +41,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Sleep well',
@@ -49,7 +49,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Wash your hands',
@@ -57,7 +57,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Go to the gym',
@@ -65,7 +65,7 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   ),
   TaskModel(
     title: 'Tell your family you love them',
@@ -73,6 +73,6 @@ final initialTasks = [
     dueDate: DateTime.now(),
     listId: initialLists.first.id,
     status: TaskStatus.active,
-    id: uuid.v4(),
+    id: kUuid.v4(),
   )
 ];

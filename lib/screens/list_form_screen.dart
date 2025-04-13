@@ -1,11 +1,9 @@
-import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/models/list_model.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/extensions/build_context_extension.dart';
 import 'package:dutask/utils/constants.dart';
 import 'package:dutask/utils/form_validator.dart';
-import 'package:dutask/utils/functions.dart';
-import 'package:dutask/widgets/dropdown_menu_formfield.dart';
+import 'package:dutask/widgets/list_form/icon_dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,27 +27,28 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.list != null) {
-      final widgetList = widget.list!;
-      _screenTitle = widgetList.title;
-      _title = widgetList.title;
-      _description = widgetList.description;
-      _icon = widgetList.icon;
+
+    final list = widget.list;
+    if (list != null) {
+      _screenTitle = list.title;
+      _title = list.title;
+      _description = list.description;
+      _icon = list.icon;
     }
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
 
-      String snackBarMessage;
       final listsNotifier = ref.read(listsProvider.notifier);
+      final list = widget.list;
+      String snackBarMessage;
 
-      if (widget.list != null) {
-        final widgetList = widget.list!;
+      if (list != null) {
         listsNotifier.updateList(
-          widgetList.id,
-          widgetList.copyWith(
+          list.id,
+          list.copyWith(
             title: _title,
             icon: _icon,
             description: _description,
@@ -59,7 +58,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
       } else {
         listsNotifier.createList(
           ListModel(
-            id: uuid.v4(),
+            id: kUuid.v4(),
             title: _title,
             icon: _icon,
             description: _description,
@@ -67,49 +66,23 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
         );
         snackBarMessage = 'List created successfully';
       }
+
       Navigator.of(context).pop();
       context.showSnackBarWithUndo(listsNotifier.undo, snackBarMessage);
     }
   }
 
   void _delete() {
+    final list = widget.list;
+    if (list == null) return;
+
     final listsNotifier = ref.read(listsProvider.notifier);
-    listsNotifier.deleteList(widget.list!.id);
+    listsNotifier.deleteList(list.id);
+
     Navigator.of(context).pop();
     context.showSnackBarWithUndo(
-        listsNotifier.undo, 'List deleted successfully');
-  }
-
-  Widget _buildIconDropdown() {
-    return DropdownMenuFormField<String>(
-      requestFocusOnTap: true,
-      width: MediaQuery.of(context).size.width - 32,
-      initialValue: _icon,
-      leadingIcon: Icon(_icon != '' ? listIcons[_icon] : Icons.question_mark),
-      label: Text('Icon'),
-      onSaved: (String? value) {
-        if (value != null) {
-          _icon = value;
-        }
-      },
-      validator: (String? value) => FormValidator.icon(
-        value,
-        listIcons.keys.toList(),
-      ),
-      onChanged: (String? value) {
-        if (value != null) {
-          setState(() {
-            _icon = value;
-          });
-        }
-      },
-      dropdownMenuEntries: listIcons.keys.map((icon) {
-        return DropdownMenuEntry(
-          value: icon,
-          label: getIconName(icon),
-          leadingIcon: Icon(listIcons[icon]),
-        );
-      }).toList(),
+      listsNotifier.undo,
+      'List deleted successfully',
     );
   }
 
@@ -130,7 +103,7 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
             children: [
               TextFormField(
                 initialValue: _title,
-                maxLength: 63,
+                maxLength: kMaxTitleLength,
                 autofocus: widget.list == null,
                 decoration: const InputDecoration(
                   label: Text('Title'),
@@ -138,11 +111,17 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
                 ),
                 validator: (value) => FormValidator.title(value),
                 onSaved: (value) {
-                  _title = value!;
+                  if (value != null) _title = value;
                 },
               ),
               const SizedBox(height: 20),
-              _buildIconDropdown(),
+              IconDropdownField(
+                selectedIcon: _icon,
+                onChanged: (value) => setState(() => _icon = value),
+                onSaved: (value) {
+                  if (value != null) _icon = value;
+                },
+              ),
               const SizedBox(height: 40),
               TextFormField(
                 initialValue: _description,
@@ -150,8 +129,8 @@ class _ListFormViewState extends ConsumerState<ListFormScreen> {
                   label: Text('Description'),
                   border: OutlineInputBorder(),
                 ),
-                minLines: 5,
-                maxLines: 10,
+                minLines: kMinTextFieldLines,
+                maxLines: kMaxTextFieldLines,
                 onSaved: (onDescriptionSaved) =>
                     _description = onDescriptionSaved,
               ),

@@ -3,16 +3,12 @@ import 'package:dutask/models/list_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ListsProvider extends Notifier<List<ListModel>> {
-  List<ListModel> _fetchLists() {
-    return initialLists;
-  }
+  List<ListModel> previousState = const [];
 
   @override
   build() {
     return _fetchLists();
   }
-
-  late List<ListModel> previousState;
 
   void createList(ListModel list) {
     previousState = [...state];
@@ -23,19 +19,25 @@ class ListsProvider extends Notifier<List<ListModel>> {
     previousState = [...state];
     final localPreviousState = [...state];
     final listToReplaceIndex = state.indexWhere((list) => list.id == listId);
-    localPreviousState[listToReplaceIndex] = updatedList;
-    state = [...localPreviousState];
+    if (listToReplaceIndex != -1) {
+      localPreviousState[listToReplaceIndex] = updatedList;
+      state = [...localPreviousState];
+    }
   }
 
   void deleteList(String listId) {
     previousState = [...state];
-    state = [...state.where((list) => list.id != listId)];
+    state = state.where((list) => list.id != listId).toList();
   }
 
   void undo() {
     final localPreviousState = [...state];
     state = [...previousState];
     previousState = [...localPreviousState];
+  }
+
+  List<ListModel> _fetchLists() {
+    return initialLists;
   }
 }
 

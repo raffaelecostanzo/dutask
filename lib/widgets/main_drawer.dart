@@ -2,6 +2,7 @@ import 'package:dutask/data/list_icons.dart';
 import 'package:dutask/providers/lists_provider.dart';
 import 'package:dutask/screens/list_form_screen.dart';
 import 'package:dutask/screens/settings_screen.dart';
+import 'package:dutask/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,12 +14,16 @@ class MainDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lists = ref.watch(listsProvider);
+
     return SafeArea(
       child: Drawer(
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 20, left: 20),
+              padding: EdgeInsets.only(
+                top: kSafeAreaTopPadding,
+                left: kSafeAreaLeftPadding,
+              ),
               alignment: AlignmentDirectional.topStart,
               child: Text(
                 'Dutask',
