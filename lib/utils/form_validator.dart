@@ -4,11 +4,13 @@ import 'package:dutask/utils/constants.dart';
 class FormValidator {
   static String? title(String? title) {
     if (title == null || title.trim().isEmpty) return 'Enter some text';
+
     return null;
   }
 
   static String? icon(String? iconName, List<String> iconList) {
     if (!iconList.contains(iconName)) return 'Enter a valid icon name';
+
     return null;
   }
 
@@ -18,6 +20,7 @@ class FormValidator {
       (list) => list == listId,
     );
     if (foundList == null) return 'Enter a valid list name';
+
     return null;
   }
 
@@ -32,6 +35,7 @@ class FormValidator {
     } catch (error) {
       return 'Invalid date';
     }
+
     return null;
   }
 }

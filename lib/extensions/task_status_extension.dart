@@ -29,6 +29,7 @@ extension TaskStatusExtension on TaskStatus {
 
   bool equalsToFilter(TaskStatusFilter taskStatusFilter) {
     if (taskStatusFilter == TaskStatusFilter.all) return true;
+
     return taskStatusFilter.name == name;
   }
 
